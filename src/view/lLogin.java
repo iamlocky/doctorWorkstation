@@ -1,4 +1,7 @@
+package view;
+
 import com.google.gson.Gson;
+import com.sun.deploy.panel.RadioPropertyGroup;
 import controller.Controller;
 import controller.IControllerListener;
 import model.Model;
@@ -8,47 +11,68 @@ import model.bean.User;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
-import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class lLogin implements IControllerListener<User> {
     private static JFrame frame;
+    private static String[] args1;
     private JPanel panel1;
     private JButton buttonLogin;
     private JTextField name;
     private JPasswordField passwordField1;
     private JProgressBar progressBar1;
+    private JRadioButton radioButton1;
+    private JRadioButton radioButton2;
+    private ButtonGroup buttonGroup;
     private Gson gson = Model.getGson();
-
     private Controller controller = new Controller(this, User.class);
 
+    private int type = 0;
+
     public static void main(String[] args) {
+        args1=args;
         frame = new JFrame("登录门诊医生工作站");
         frame.setContentPane(new lLogin().panel1);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.pack();
         frame.setVisible(true);
         frame.setResizable(false);
-        int windowWidth = frame.getWidth(); //获得窗口宽
-        int windowHeight = frame.getHeight(); //获得窗口高
-        Toolkit kit = Toolkit.getDefaultToolkit(); //定义工具包
-        Dimension screenSize = kit.getScreenSize(); //获取屏幕的尺寸
-        int screenWidth = screenSize.width; //获取屏幕的宽
-        int screenHeight = screenSize.height; //获取屏幕的高
-        frame.setLocation(screenWidth / 2 - windowWidth / 2, screenHeight / 2 - windowHeight / 2);//设置窗口居中显示
+        ViewUtils.toCenter(frame);
     }
 
     void initView() {
+        if (args1!=null&&args1.length==2){
+            name.setText(args1[0]);
+            passwordField1.setText(args1[1]);
+        }
+        panel1.setBorder(new EmptyBorder(10, 10, 10, 10));
         progressBar1.setVisible(false);
-        Main.changeFont(panel1);
-        panel1.setBorder(new EmptyBorder(10,10,10,10));
-    }
+        ViewUtils.changeFont(panel1);
+        buttonGroup = new ButtonGroup();
+        buttonGroup.add(radioButton1);
+        buttonGroup.add(radioButton2);
 
+        radioButton1.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                type = 0;
+            }
+        });
+        radioButton2.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                type = 1;
+            }
+        });
+        radioButton1.setSelected(true);
+        buttonLogin.setVerticalTextPosition(SwingConstants.CENTER);
+    }
 
 
     public lLogin() {
         initView();
+
         buttonLogin.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -60,6 +84,7 @@ public class lLogin implements IControllerListener<User> {
                 controller.login(name.getText(), new String(passwordField1.getPassword()));
             }
         });
+
     }
 
     @Override
@@ -69,6 +94,20 @@ public class lLogin implements IControllerListener<User> {
         progressBar1.setVisible(false);
 
         JOptionPane.showMessageDialog(null, "员工 " + data.getUsername() + "登录成功！", "欢迎", JOptionPane.INFORMATION_MESSAGE);
+        try {
+            switch (type) {
+                case 0: {
+                    NurseStation.main(null);
+                    break;
+                }
+                case 1: {
+                    DoctorStation.main(null);
+                    break;
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         frame.dispose();
     }
 

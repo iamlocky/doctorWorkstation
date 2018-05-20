@@ -1,11 +1,10 @@
 package view;
 
 import com.google.gson.Gson;
-import com.sun.deploy.panel.RadioPropertyGroup;
 import controller.Controller;
 import controller.IControllerListener;
 import model.Model;
-import model.StringUtil;
+import Utils.StringUtil;
 import model.bean.ErrInfo;
 import model.bean.User;
 
@@ -14,7 +13,7 @@ import javax.swing.border.EmptyBorder;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class lLogin implements IControllerListener<User> {
+public class LoginView implements IControllerListener<User> {
     private static JFrame frame;
     private static String[] args1;
     private JPanel panel1;
@@ -33,7 +32,7 @@ public class lLogin implements IControllerListener<User> {
     public static void main(String[] args) {
         args1=args;
         frame = new JFrame("登录门诊医生工作站");
-        frame.setContentPane(new lLogin().panel1);
+        frame.setContentPane(new LoginView().panel1);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.pack();
         frame.setVisible(true);
@@ -70,7 +69,7 @@ public class lLogin implements IControllerListener<User> {
     }
 
 
-    public lLogin() {
+    public LoginView() {
         initView();
 
         buttonLogin.addActionListener(new ActionListener() {
@@ -97,11 +96,11 @@ public class lLogin implements IControllerListener<User> {
         try {
             switch (type) {
                 case 0: {
-                    NurseStation.main(null);
+                    NurseStationView.main(null);
                     break;
                 }
                 case 1: {
-                    DoctorStation.main(null);
+                    DoctorStationView.main(null);
                     break;
                 }
             }

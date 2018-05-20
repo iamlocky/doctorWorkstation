@@ -1,5 +1,5 @@
 import org.jb2011.lnf.beautyeye.BeautyEyeLNFHelper;
-import view.lLogin;
+import view.LoginView;
 
 import javax.swing.*;
 import java.awt.*;
@@ -18,7 +18,7 @@ public class Main {
         }
 
         testData=new String[]{"123","123"};
-        lLogin.main(testData);
+        LoginView.main(testData);
     }
 
 

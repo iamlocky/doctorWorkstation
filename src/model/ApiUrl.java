@@ -21,6 +21,7 @@ public class ApiUrl {
 
     public static class Post{
         public static String REGISTER_USER_URL = BASE_URL + "users";
+        public static String Patient_URL = CLASS_URL + "paitent";
         public static String MD5_USER_URL = CLASS_URL + "MD5";
     }
 

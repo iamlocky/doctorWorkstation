@@ -1,12 +1,16 @@
 package view;
 
+import controller.DoctorController;
+
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
-public class DoctorStation{
+public class DoctorStationView {
     public static void main(String[] args) {
         frame = new JFrame("医生工作站");
-        new DoctorStation();
+        new DoctorStationView();
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.pack();
         frame.setVisible(true);
@@ -16,7 +20,9 @@ public class DoctorStation{
     private JPanel panel1;
     private JButton button1;
 
-    public DoctorStation() {
+    private DoctorController doctorController;
+
+    public DoctorStationView() {
         Container container=frame.getContentPane();//创建一个容器
 
         //创建文本区域组件
@@ -29,6 +35,13 @@ public class DoctorStation{
         container.add(sp);
         //设置容器的外部特性
         frame.setSize(400,400);//设置窗口的大小
+        doctorController=new DoctorController();
+        button1.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                doctorController.print(null);
+            }
+        });
     }
 
 }

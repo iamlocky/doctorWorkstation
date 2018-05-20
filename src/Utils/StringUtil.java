@@ -1,4 +1,4 @@
-package model;
+package Utils;
 
 import java.beans.XMLDecoder;
 import java.io.BufferedInputStream;

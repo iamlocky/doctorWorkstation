@@ -5,7 +5,7 @@ import java.util.Date;
 
 public class MedicalCase implements Serializable {
     private PatientInfo patientInfo;
-    private String doctor;
+    private User doctor;
     private String doctorID;
     private String condition;
     private String diagnose;
@@ -13,11 +13,11 @@ public class MedicalCase implements Serializable {
 
     private Date date;
 
-    public String getDoctor() {
+    public User getDoctor() {
         return doctor;
     }
 
-    public void setDoctor(String doctor) {
+    public void setDoctor(User doctor) {
         this.doctor = doctor;
     }
 

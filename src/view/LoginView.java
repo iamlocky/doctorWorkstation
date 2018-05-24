@@ -7,6 +7,8 @@ import model.Model;
 import Utils.StringUtil;
 import model.bean.ErrInfo;
 import model.bean.User;
+import view.Doctor.DoctorStationView;
+import view.Nurse.NurseStationView;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
@@ -92,7 +94,6 @@ public class LoginView implements IControllerListener<User> {
             return;
         progressBar1.setVisible(false);
 
-        JOptionPane.showMessageDialog(null, "员工 " + data.getUsername() + "登录成功！", "欢迎", JOptionPane.INFORMATION_MESSAGE);
         try {
             switch (type) {
                 case 0: {
@@ -108,6 +109,8 @@ public class LoginView implements IControllerListener<User> {
             e.printStackTrace();
         }
         frame.dispose();
+        JOptionPane.showMessageDialog(null, "员工 " + data.getUsername() + "登录成功！", "欢迎", JOptionPane.INFORMATION_MESSAGE);
+
     }
 
     @Override

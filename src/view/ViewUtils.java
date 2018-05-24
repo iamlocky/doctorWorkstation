@@ -8,10 +8,24 @@ public class ViewUtils {
 
     public static void changeFont(JComponent jComponent) {
         int count = jComponent.getComponentCount();
+        int size=12;
         for (int i = 0; i < count; i++) {
             Component component = jComponent.getComponent(i);
+            size=component.getFont().getSize();
+            size=size>=12?size:12;
+            font= new Font("微软雅黑", Font.PLAIN, size);
             component.setFont(font);
-            component.setPreferredSize(new Dimension(-1, 25));
+            if (component.getPreferredSize().height<25) {
+                component.setPreferredSize(new Dimension(-1, 25));
+            }
+            try {
+                JComponent jComponent1=(JComponent)component;
+                if (jComponent1.getComponentCount()!=0){
+                    changeFont(jComponent1);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
     }
 

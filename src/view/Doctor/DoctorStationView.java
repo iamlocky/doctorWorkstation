@@ -1,6 +1,7 @@
-package view;
+package view.Doctor;
 
 import controller.DoctorController;
+import view.ViewUtils;
 
 import javax.swing.*;
 import java.awt.*;

@@ -15,6 +15,7 @@ public class Main {
         try {
             BeautyEyeLNFHelper.launchBeautyEyeLNF();
         } catch (Exception e) {
+            e.printStackTrace();
         }
 
         testData=new String[]{"123","123"};

@@ -1,16 +1,14 @@
 package model.bean;
 
-import model.Model;
 
 public class PatientInfo {
     private String id;
     private String name;
-    private String gender;
+    private Integer gender;
     private String birth;
 
 
     private String drugAllergies;
-    private String bloodType;
 
 
     public String getId() {
@@ -29,13 +27,6 @@ public class PatientInfo {
         this.name = name;
     }
 
-    public String getGender() {
-        return gender;
-    }
-
-    public void setGender(String gender) {
-        this.gender = gender;
-    }
 
     public String getBirth() {
         return birth;
@@ -54,16 +45,22 @@ public class PatientInfo {
         this.drugAllergies = drugAllergies;
     }
 
-    public String getBloodType() {
-        return bloodType;
+    public Integer getGender() {
+        return gender;
     }
 
-    public void setBloodType(String bloodType) {
-        this.bloodType = bloodType;
+    public void setGender(Integer gender) {
+        this.gender = gender;
     }
 
     @Override
     public String toString() {
-        return Model.getGson().toJson(this);
+        return "PatientInfo{" +
+                "id='" + id + '\'' +
+                ", name='" + name + '\'' +
+                ", gender=" + gender +
+                ", birth='" + birth + '\'' +
+                ", drugAllergies='" + drugAllergies + '\'' +
+                '}';
     }
 }

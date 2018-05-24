@@ -28,7 +28,7 @@ public class Controller<T> {
 
     private T data;
     private static DoctorRsa doctorRsa;
-    private static Patient patient;
+
     private IControllerListener<T> iControllerListener;
     private Gson gson = new GsonBuilder().serializeNulls().create();
     private String jsonData;
@@ -59,13 +59,7 @@ public class Controller<T> {
         this.doctorRsa = doctorRsa;
     }
 
-    public static Patient getPatient() {
-        return patient;
-    }
 
-    public void setPatient(Patient patient) {
-        this.patient = patient;
-    }
 
 
 
@@ -195,59 +189,10 @@ public class Controller<T> {
 
 
 
-    public IControllerListener<Patient> getPatientDoListener;
 
-    public void getPatientDo(IControllerListener<Patient> getPatientDoListener){
-        this.getPatientDoListener=getPatientDoListener;
-        new Thread(getPatientInBackground).start();
-    }
-
-    private Runnable getPatientInBackground = new Runnable() {
-        @Override
-        public void run() {
-            try {
-
-                File filePatient=new File("patient.info");
-                if (!filePatient.exists())
-                {
-                    SwingUtilities.invokeLater(()->{
-                        JOptionPane.showMessageDialog(null,"找不到患者信息");
-                    });
-                    return;
-                }
-                StringBuffer stringBuffer = new StringBuffer();
-                FileInputStream fileInputStream = new FileInputStream(filePatient);
-                BufferedInputStream bufferedInputStream = new BufferedInputStream(fileInputStream);
-                byte[] buffer = new byte[1024];
-                int flag = 0;
-                while ((flag = bufferedInputStream.read(buffer)) != -1) {
-                    stringBuffer.append(new String(buffer, 0, flag));
-                }
-                jsonData = stringBuffer.toString();
-                jsonData= AESUtil.decrypt(jsonData,patientPassword);
-                log(jsonData);
-                patient = gson.fromJson(jsonData, Patient.class);
-                if (getPatientDoListener!=null){
-                    SwingUtilities.invokeLater(()->{
-                        getPatientDoListener.done(patient);
-                    });
-                }
-            } catch (Exception e) {
-                if (getPatientDoListener!=null){
-                    SwingUtilities.invokeLater(()->{
-                        getPatientDoListener.done(jsonData);
-                    });
-                }
-                e.printStackTrace();
-
-            }
-
-        }
-    };
 
     public void setData(T data) {
         this.data = data;
-//        new Thread(setDataInBackground).start();
     }
 
     public void getDoctorRsaDo(){

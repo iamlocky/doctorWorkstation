@@ -6,10 +6,10 @@ public class PatientInfo {
     private String name;
     private Integer gender;
     private String birth;
-
-
+    private String idCardNumber;
+    private String adress;
     private String drugAllergies;
-
+    private String insuranceNumber;
 
     public String getId() {
         return id;
@@ -51,6 +51,30 @@ public class PatientInfo {
 
     public void setGender(Integer gender) {
         this.gender = gender;
+    }
+
+    public String getIdCardNumber() {
+        return idCardNumber;
+    }
+
+    public void setIdCardNumber(String idCardNumber) {
+        this.idCardNumber = idCardNumber;
+    }
+
+    public String getAdress() {
+        return adress;
+    }
+
+    public void setAdress(String adress) {
+        this.adress = adress;
+    }
+
+    public String getInsuranceNumber() {
+        return insuranceNumber;
+    }
+
+    public void setInsuranceNumber(String insuranceNumber) {
+        this.insuranceNumber = insuranceNumber;
     }
 
     @Override

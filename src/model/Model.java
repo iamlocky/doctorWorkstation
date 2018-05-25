@@ -460,7 +460,7 @@ public class Model<E> {
         StackTraceElement[] trace = new Throwable().getStackTrace();
         for (StackTraceElement traceElement : trace)
             System.out.println("\t---at " + traceElement);
-        System.out.println("---"+msg.toString());
+        System.out.println(msg.toString());
         System.out.println("------------------------------------\n");
     }
 }

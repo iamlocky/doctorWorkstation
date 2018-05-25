@@ -8,7 +8,7 @@ import Utils.StringUtil;
 import model.bean.ErrInfo;
 import model.bean.User;
 import view.Doctor.DoctorStationView;
-import view.Nurse.NurseStationView;
+import view.Clinic.ClinicStationView;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
@@ -97,7 +97,7 @@ public class LoginView implements IControllerListener<User> {
         try {
             switch (type) {
                 case 0: {
-                    NurseStationView.main(null);
+                    ClinicStationView.main(null);
                     break;
                 }
                 case 1: {

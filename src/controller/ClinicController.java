@@ -9,12 +9,12 @@ import model.bean.PatientInfo;
 
 import java.lang.reflect.Type;
 
-public class NurseController {
+public class ClinicController {
     Model model;
     Gson gson=Model.getGson();
     Type type = new Type() {
     };
-    public NurseController(){
+    public ClinicController(){
         model=new Model();
     }
 

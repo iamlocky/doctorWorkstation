@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<form xmlns="http://www.intellij.com/uidesigner/form/" version="1" bind-to-class="view.Nurse.AddPatient">
+<form xmlns="http://www.intellij.com/uidesigner/form/" version="1" bind-to-class="view.Clinic.AddPatient">
   <grid id="27dc6" binding="panel1" layout-manager="FormLayout">
     <rowspec value="center:d:noGrow"/>
+    <rowspec value="top:4dlu:noGrow"/>
+    <rowspec value="center:max(d;4px):noGrow"/>
     <rowspec value="top:4dlu:noGrow"/>
     <rowspec value="center:max(d;4px):noGrow"/>
     <rowspec value="top:4dlu:noGrow"/>
@@ -59,7 +61,8 @@
           <component id="f3d45" class="javax.swing.JTextField" binding="tfName">
             <constraints>
               <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false">
-                <preferred-size width="200" height="-1"/>
+                <minimum-size width="200" height="-1"/>
+                <preferred-size width="250" height="-1"/>
               </grid>
             </constraints>
             <properties>
@@ -91,7 +94,9 @@
           </component>
           <component id="66c66" class="javax.swing.JRadioButton" binding="rb1">
             <constraints>
-              <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+              <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false">
+                <preferred-size width="100" height="-1"/>
+              </grid>
             </constraints>
             <properties>
               <text value="男"/>
@@ -99,7 +104,9 @@
           </component>
           <component id="559bd" class="javax.swing.JRadioButton" binding="rb2">
             <constraints>
-              <grid row="0" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+              <grid row="0" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false">
+                <preferred-size width="100" height="-1"/>
+              </grid>
             </constraints>
             <properties>
               <text value="女"/>
@@ -131,7 +138,8 @@
           <component id="c5c8e" class="javax.swing.JTextField" binding="tfIDNumber">
             <constraints>
               <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false">
-                <preferred-size width="200" height="-1"/>
+                <minimum-size width="200" height="-1"/>
+                <preferred-size width="250" height="-1"/>
               </grid>
             </constraints>
             <properties>
@@ -164,7 +172,8 @@
           <component id="46ce2" class="javax.swing.JTextField" binding="tfInsuranceNumber">
             <constraints>
               <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false">
-                <preferred-size width="200" height="-1"/>
+                <minimum-size width="200" height="-1"/>
+                <preferred-size width="250" height="-1"/>
               </grid>
             </constraints>
             <properties>
@@ -197,7 +206,8 @@
           <component id="8ea86" class="javax.swing.JTextField" binding="tfAdress">
             <constraints>
               <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false">
-                <preferred-size width="200" height="-1"/>
+                <minimum-size width="200" height="-1"/>
+                <preferred-size width="250" height="-1"/>
               </grid>
             </constraints>
             <properties>
@@ -230,7 +240,8 @@
           <component id="819db" class="javax.swing.JTextField" binding="tfADrug">
             <constraints>
               <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false">
-                <preferred-size width="200" height="-1"/>
+                <minimum-size width="200" height="-1"/>
+                <preferred-size width="250" height="-1"/>
               </grid>
             </constraints>
             <properties>
@@ -239,6 +250,15 @@
           </component>
         </children>
       </grid>
+      <component id="b6aef" class="javax.swing.JButton" binding="btnOK">
+        <constraints>
+          <grid row="14" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+          <forms/>
+        </constraints>
+        <properties>
+          <text value="确认"/>
+        </properties>
+      </component>
     </children>
   </grid>
 </form>

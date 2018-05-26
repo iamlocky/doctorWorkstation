@@ -2,7 +2,9 @@ package view;
 
 import javax.swing.*;
 import java.awt.*;
-
+/**
+ * 界面效果工具
+ */
 public class ViewUtils {
     private static Font font = new Font("微软雅黑", Font.PLAIN, 12);
 
@@ -16,7 +18,7 @@ public class ViewUtils {
             font= new Font("微软雅黑", Font.PLAIN, size);
             component.setFont(font);
             if (component.getPreferredSize().height<25) {
-                component.setPreferredSize(new Dimension(-1, 25));
+                component.setPreferredSize(new Dimension(component.getPreferredSize().width, 25));
             }
             try {
                 JComponent jComponent1=(JComponent)component;

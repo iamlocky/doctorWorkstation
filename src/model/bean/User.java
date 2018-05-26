@@ -67,4 +67,8 @@ public class User implements Serializable{
     public String toString() {
         return Model.getGson().toJson(this);
     }
+
+    public Pointer toPointer() {
+        return new Pointer("Pointer",getClass().getName(),objectId);
+    }
 }

@@ -1,8 +1,10 @@
 package controller;
 
+import Utils.StringUtil;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
+import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
 import Utils.AESUtil;
 import model.ApiUrl;
@@ -18,6 +20,7 @@ import javax.swing.*;
 import java.io.*;
 import java.lang.reflect.Type;
 import java.util.List;
+import java.util.Map;
 
 
 /**
@@ -27,15 +30,13 @@ import java.util.List;
 public class Controller<T> {
 
     private T data;
-    private static DoctorRsa doctorRsa;
 
     private IControllerListener<T> iControllerListener;
     private Gson gson = new GsonBuilder().serializeNulls().create();
     private String jsonData;
     File file = new File("data.txt");
     private Type type;
-    private static User user=new User();
-    private static String patientPassword;
+    private static User user = new User();
     private static MedicalCase medicalCase;
 
     public Controller(IControllerListener<T> iControllerListener, Type type) {
@@ -51,25 +52,11 @@ public class Controller<T> {
         Controller.medicalCase = medicalCase;
     }
 
-    public static DoctorRsa getDoctorRsa() {
-        return doctorRsa;
-    }
-
-    public void setDoctorRsa(DoctorRsa doctorRsa) {
-        this.doctorRsa = doctorRsa;
-    }
-
-
-
-
-
-    public void setPatientPassword(String patientPassword) {
-        this.patientPassword = leftPading(patientPassword,"a",16);;
-    }
 
     public static User getUser() {
         return user;
     }
+
     public void login(String u, String p) {
         Model model = new Model();
         LoginUser loginUser = new LoginUser();
@@ -80,22 +67,22 @@ public class Controller<T> {
             public void onFinish(String responseBean, Exception e) {
 
                 try {
-                    JsonObject json=gson.fromJson(responseBean,JsonObject.class);
-                    if (json.get("code")!=null) {
-                        iControllerListener.done(responseBean);
-                    }else {
-                        data= Model.getGson().fromJson(responseBean,type);
-                        user=(User)data;
+                    JsonObject json = gson.fromJson(responseBean, JsonObject.class);
+                    if (json.get("code") != null) {
+                        iControllerListener.doneRaw(responseBean);
+                    } else {
+                        data = Model.getGson().fromJson(responseBean, type);
+                        user = (User) data;
                         iControllerListener.done(data);
                     }
-                }catch (Exception e1){
-                    iControllerListener.done(responseBean);
+                } catch (Exception e1) {
+                    iControllerListener.doneRaw(responseBean);
                 }
             }
         });
     }
 
-    public static void print(String s){
+    public static void print(String s) {
         HashPrintRequestAttributeSet pras = new HashPrintRequestAttributeSet();
         // 设置打印格式，因为未确定类型，所以选择autosense
         DocFlavor flavor = DocFlavor.INPUT_STREAM.AUTOSENSE;
@@ -117,9 +104,10 @@ public class Controller<T> {
             } catch (Exception e) {
                 e.printStackTrace();
             }
-    }}
+        }
+    }
 
-    public void register(String u, String p,JProgressBar progressBar){
+    public void register(String u, String p, JProgressBar progressBar) {
         Model model = new Model();
         LoginUser loginUser = new LoginUser();
         loginUser.setUsername(u);
@@ -127,20 +115,20 @@ public class Controller<T> {
         model.postData(ApiUrl.Post.REGISTER_USER_URL, loginUser, new OnStringResponseListener() {
             @Override
             public void onFinish(String responseBean, Exception e) {
-                SwingUtilities.invokeLater(()->{
+                SwingUtilities.invokeLater(() -> {
                     progressBar.setVisible(false);
                 });
                 try {
-                    JsonObject json=gson.fromJson(responseBean,JsonObject.class);
-                    if (json.get("code")!=null) {
-                        JOptionPane.showMessageDialog(null,responseBean,"注册失败",JOptionPane.ERROR_MESSAGE);
-                    }else if(json.get("objectId")!=null){
-                        JOptionPane.showMessageDialog(null,"注册成功");
-                    }else {
-                        JOptionPane.showMessageDialog(null,responseBean,"注册失败",JOptionPane.ERROR_MESSAGE);
+                    JsonObject json = gson.fromJson(responseBean, JsonObject.class);
+                    if (json.get("code") != null) {
+                        JOptionPane.showMessageDialog(null, responseBean, "注册失败", JOptionPane.ERROR_MESSAGE);
+                    } else if (json.get("objectId") != null) {
+                        JOptionPane.showMessageDialog(null, "注册成功");
+                    } else {
+                        JOptionPane.showMessageDialog(null, responseBean, "注册失败", JOptionPane.ERROR_MESSAGE);
                     }
-                }catch (Exception e1){
-                    JOptionPane.showMessageDialog(null,responseBean,"注册失败",JOptionPane.ERROR_MESSAGE);
+                } catch (Exception e1) {
+                    JOptionPane.showMessageDialog(null, responseBean, "注册失败", JOptionPane.ERROR_MESSAGE);
                 }
             }
         });
@@ -164,7 +152,7 @@ public class Controller<T> {
                 }
                 jsonData = stringBuffer.toString();
                 log(jsonData);
-                if (type!=null) {
+                if (type != null) {
                     data = gson.fromJson(jsonData, type);
                 }
             } catch (Exception e) {
@@ -176,8 +164,8 @@ public class Controller<T> {
                     if (type != null) {
 
                         iControllerListener.done(data);
-                    }else {
-                        iControllerListener.done(jsonData);
+                    } else {
+                        iControllerListener.doneRaw(jsonData);
                     }
                 }
             });
@@ -185,35 +173,69 @@ public class Controller<T> {
     };
 
 
+    public void findPatient(Map<String, String> data) {
+        Model model = new Model();
+        if (StringUtil.isEmpty(data.get("name")))
+        {
+            data=null;
+        }
+            model.getData(ApiUrl.Post.PatientInfo_URL, data, new OnStringResponseListener() {
+            @Override
+            public void onFinish(String responseBean, Exception e) {
+                if (responseBean.contains("error") || e != null) {
+                    iControllerListener.showMessage(responseBean + "");
+                } else {
+                    try {
+                        iControllerListener.done(gson.fromJson(responseBean, type));
+                    } catch (Exception e1) {
+                        e1.printStackTrace();
+                    }
+                }
+            }
+        });
+    }
 
+    public void getDoctors(){
+        Model model = new Model();
+        model.getData(ApiUrl.Get.DOCTOR_URL, null, new OnStringResponseListener() {
+            @Override
+            public void onFinish(String responseBean, Exception e) {
+                if (responseBean.contains("error") || e != null) {
+                    iControllerListener.showMessage(responseBean + "");
+                } else {
+                    try {
+                        iControllerListener.done(gson.fromJson(responseBean, new TypeToken<ResultBean<DoctorBean>>() {
+                        }.getType()));
+                    } catch (Exception e1) {
+                        e1.printStackTrace();
+                    }
+                }
+            }
+        });
+    }
 
+    public void findDoctor(Map<String, String> data) {
 
-
+        Model model = new Model();
+        model.getData(ApiUrl.Get.DOCTOR_URL, data, new OnStringResponseListener() {
+            @Override
+            public void onFinish(String responseBean, Exception e) {
+                if (responseBean.contains("error") || e != null) {
+                    iControllerListener.showMessage(responseBean + "");
+                } else {
+                    try {
+                        iControllerListener.done(gson.fromJson(responseBean, type));
+                    } catch (Exception e1) {
+                        e1.printStackTrace();
+                    }
+                }
+            }
+        });
+    }
 
 
     public void setData(T data) {
         this.data = data;
-    }
-
-    public void getDoctorRsaDo(){
-        Model model=new Model();
-
-        model.getData(ApiUrl.Get.DOCTOR_RSA_URL,null, new OnStringResponseListener() {
-            @Override
-            public void onFinish(String responseBean, Exception e) {
-                try {
-                    JsonObject json=gson.fromJson(responseBean,JsonObject.class);
-                    if (json.get("code")!=null) {
-
-                    }else {
-                        Type type=new TypeToken<List<DoctorRsa>>(){}.getType();
-                        doctorRsa= Model.getGson().fromJson(responseBean,type);
-                    }
-                }catch (Exception e1){
-                    e1.printStackTrace();
-                }
-            }
-        });
     }
 
 
@@ -254,7 +276,7 @@ public class Controller<T> {
         System.out.println(msg);
     }
 
-    public static String leftPading(String strSrc,String flag,int strSrcLength) {
+    public static String leftPading(String strSrc, String flag, int strSrcLength) {
         String strReturn = "";
         String strtemp = "";
         int curLength = strSrc.trim().length();

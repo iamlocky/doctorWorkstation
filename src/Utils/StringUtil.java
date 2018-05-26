@@ -952,7 +952,7 @@ public class StringUtil {
         Matcher matcher = p.matcher(str);
         // 范型
         Set<String> result = new HashSet<String>();// 目的是：相同的字符串只返回一个。。。 不重复元素
-        // boolean find() 尝试在目标字符串里查找下一个匹配子串。
+        // boolean findPatient() 尝试在目标字符串里查找下一个匹配子串。
         while (matcher.find()) {
             for (int i = 0; i < matcher.groupCount(); i++) { // int groupCount()
                 // 返回当前查找所获得的匹配组的数量。

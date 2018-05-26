@@ -109,12 +109,12 @@ public class LoginView implements IControllerListener<User> {
             e.printStackTrace();
         }
         frame.dispose();
-        JOptionPane.showMessageDialog(null, "员工 " + data.getUsername() + "登录成功！", "欢迎", JOptionPane.INFORMATION_MESSAGE);
+        JOptionPane.showMessageDialog(null, "员工 " + data.getUsername() + " 登录成功！", "欢迎", JOptionPane.INFORMATION_MESSAGE);
 
     }
 
     @Override
-    public void done(String data) {
+    public void doneRaw(String data) {
         ErrInfo errInfo = new ErrInfo();
         try {
             errInfo = gson.fromJson(data, ErrInfo.class);
@@ -122,7 +122,7 @@ public class LoginView implements IControllerListener<User> {
             e.printStackTrace();
         }
 
-        JOptionPane.showMessageDialog(null, errInfo.getError() == null ? data : "错误码" + errInfo.getCode() + "\n" +
+        JOptionPane.showMessageDialog(null, errInfo.getError() == null ? data : "错误码：" + errInfo.getCode() + "\n" +
                 "信息：" + errInfo.getError(), "登录失败", JOptionPane.ERROR_MESSAGE);
         progressBar1.setVisible(false);
 

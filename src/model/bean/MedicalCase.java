@@ -4,14 +4,21 @@ import java.io.Serializable;
 import java.util.Date;
 
 public class MedicalCase implements Serializable {
-    private PatientInfo patientInfo;
+    private Pointer patientInfo;
     private User doctor;
     private String doctorID;
     private String condition;
     private String diagnose;
     private String handle;
+    private String objectId;
 
-    private Date date;
+    public String getObjectId() {
+        return objectId;
+    }
+
+    public void setObjectId(String objectId) {
+        this.objectId = objectId;
+    }
 
     public User getDoctor() {
         return doctor;
@@ -21,19 +28,12 @@ public class MedicalCase implements Serializable {
         this.doctor = doctor;
     }
 
-    public Date getDate() {
-        return date;
-    }
 
-    public void setDate(Date date) {
-        this.date = date;
-    }
-
-    public PatientInfo getPatientInfo() {
+    public Pointer getPatientInfo() {
         return patientInfo;
     }
 
-    public void setPatientInfo(PatientInfo patientInfo) {
+    public void setPatientInfo(Pointer patientInfo) {
         this.patientInfo = patientInfo;
     }
 
@@ -67,5 +67,9 @@ public class MedicalCase implements Serializable {
 
     public void setHandle(String handle) {
         this.handle = handle;
+    }
+
+    public Pointer toPointer() {
+        return new Pointer("Pointer",getClass().getName(),objectId);
     }
 }

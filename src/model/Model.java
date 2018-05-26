@@ -10,6 +10,7 @@ import okhttp3.*;
 
 import javax.swing.*;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Type;
 import java.net.URLEncoder;
 import java.util.Iterator;
@@ -291,7 +292,11 @@ public class Model<E> {
         if (data == null) {
             log("getdata params is null");
         } else {
-            finalUrl = apiUrl_Get+"?"+gson.toJson(data);
+            try {
+                finalUrl = apiUrl_Get+"?where="+URLEncoder.encode(gson.toJson(data),"UTF-8").replace("%3A",":");
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+            }
         }
         client = new OkHttpClient.Builder().connectTimeout(connectTimeout, TimeUnit.SECONDS)
                 .readTimeout(readOrWriteTimeout, TimeUnit.SECONDS)
@@ -308,6 +313,7 @@ public class Model<E> {
             call.cancel();
         }
         call = client.newCall(request);
+        log(finalUrl);
         call.enqueue(new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
@@ -398,6 +404,48 @@ public class Model<E> {
 
             }
         });
+    }
+
+    /**
+     * @param apiUrl_Del
+     * @param id               要删除的id
+     * @param responseListener
+     */
+    public void delData(String apiUrl_Del, String id,OnStringResponseListener responseListener) {
+        client = new OkHttpClient.Builder().connectTimeout(connectTimeout, TimeUnit.SECONDS)
+                .readTimeout(readOrWriteTimeout, TimeUnit.SECONDS)
+                .writeTimeout(readOrWriteTimeout, TimeUnit.SECONDS).build();
+        requestBuilder = new Request.Builder().url(apiUrl_Del + id);
+
+        requestBuilder.addHeader("X-Bmob-Application-Id", Akey.appId);
+        requestBuilder.addHeader("X-Bmob-REST-API-Key", Akey.restId);
+        request = requestBuilder.delete().build();
+        if (call != null) {
+            call.cancel();
+        }
+        call = client.newCall(request);
+        call.enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                finishOnMainThread(responseListener, null, e);
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                try {
+                    responseString = response.body().string();
+                    log(responseString);
+
+                    finishOnMainThread(responseListener, responseString, null);
+
+                    return;
+                } catch (Exception e) {
+                    finishOnMainThread(responseListener, null, e);
+                    e.printStackTrace();
+                }
+            }
+        });
+
     }
 
 

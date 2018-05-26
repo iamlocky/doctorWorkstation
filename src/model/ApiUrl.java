@@ -17,12 +17,14 @@ public class ApiUrl {
 
         public static String LOGIN_USER_URL = BASE_URL + "login";//登录
         public static String DOCTOR_RSA_URL = CLASS_URL + "DoctorRsa";
+        public static String DOCTOR_URL = BASE_URL + "users";
     }
 
     public static class Post{
-        public static String REGISTER_USER_URL = BASE_URL + "users";
-        public static String Patient_URL = CLASS_URL + "paitent";
-        public static String MD5_USER_URL = CLASS_URL + "MD5";
+        public static String REGISTER_USER_URL = BASE_URL + "User";
+        public static String Patient_URL = CLASS_URL + "Patient";
+        public static String PatientInfo_URL = CLASS_URL + "PatientInfo";
+        public static String REGISTER_Info = BASE_URL + "RegisterInfo";
     }
 
     public static class Put{

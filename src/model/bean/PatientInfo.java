@@ -5,11 +5,13 @@ public class PatientInfo {
     private String id;
     private String name;
     private Integer gender;
+    private String phone;
     private String birth;
     private String idCardNumber;
     private String adress;
     private String drugAllergies;
     private String insuranceNumber;
+
 
     public String getId() {
         return id;
@@ -27,6 +29,13 @@ public class PatientInfo {
         this.name = name;
     }
 
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
 
     public String getBirth() {
         return birth;
@@ -77,14 +86,23 @@ public class PatientInfo {
         this.insuranceNumber = insuranceNumber;
     }
 
+//    public String getCreatedAt() {
+//        return createdAt;
+//    }
+
+
     @Override
     public String toString() {
         return "PatientInfo{" +
                 "id='" + id + '\'' +
                 ", name='" + name + '\'' +
                 ", gender=" + gender +
+                ", phone='" + phone + '\'' +
                 ", birth='" + birth + '\'' +
+                ", idCardNumber='" + idCardNumber + '\'' +
+                ", adress='" + adress + '\'' +
                 ", drugAllergies='" + drugAllergies + '\'' +
+                ", insuranceNumber='" + insuranceNumber + '\'' +
                 '}';
     }
 }

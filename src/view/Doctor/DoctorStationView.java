@@ -8,6 +8,10 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+/**
+ * 门诊医生工作台界面
+ */
+
 public class DoctorStationView {
     public static void main(String[] args) {
         frame = new JFrame("医生工作站");

@@ -1,4 +1,5 @@
-import org.jb2011.lnf.beautyeye.BeautyEyeLNFHelper;
+
+import org.pushingpixels.substance.api.skin.*;
 import view.LoginView;
 
 import javax.swing.*;
@@ -12,14 +13,21 @@ public class Main {
         UIManager.put("OptionPane.font", font);
         UIManager.put("OptionPane.messageFont", font);
         UIManager.put("OptionPane.buttonFont", font);
-        try {
-            BeautyEyeLNFHelper.launchBeautyEyeLNF();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        JFrame.setDefaultLookAndFeelDecorated(true);//设置窗口
+        JDialog.setDefaultLookAndFeelDecorated(true);//设置对话框
+        SwingUtilities.invokeLater(new Runnable() {
+            public void run() {
+                try {
+                    UIManager.setLookAndFeel(new SubstanceGraphiteAquaLookAndFeel());
+                    testData=new String[]{"张三","123"};
+                    LoginView.main(testData);
+                } catch (Exception e) {
+                    System.out.println("Substance Graphite failed to initialize");
+                }
+            }
+        });
 
-        testData=new String[]{"123","123"};
-        LoginView.main(testData);
+
     }
 
 

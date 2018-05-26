@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<form xmlns="http://www.intellij.com/uidesigner/form/" version="1" bind-to-class="view.Clinic.FindInfo">
+  <grid id="27dc6" binding="panel1" default-binding="true" layout-manager="BorderLayout" hgap="0" vgap="0">
+    <constraints>
+      <xy x="20" y="20" width="500" height="400"/>
+    </constraints>
+    <properties>
+      <preferredSize width="550" height="400"/>
+    </properties>
+    <border type="none"/>
+    <children>
+      <component id="4d5ec" class="javax.swing.JLabel" binding="lb">
+        <constraints border-constraint="North"/>
+        <properties>
+          <font size="18"/>
+          <horizontalAlignment value="0"/>
+          <preferredSize width="36" height="30"/>
+          <text value="查找"/>
+        </properties>
+      </component>
+      <component id="b0e5" class="javax.swing.JButton" binding="btnOK">
+        <constraints border-constraint="South"/>
+        <properties>
+          <label value="确认选择"/>
+          <preferredSize width="56" height="40"/>
+          <text value="确认选择"/>
+        </properties>
+      </component>
+      <grid id="9f77a" layout-manager="BorderLayout" hgap="0" vgap="0">
+        <constraints border-constraint="Center"/>
+        <properties/>
+        <border type="none"/>
+        <children>
+          <grid id="154d0" binding="panelmain" layout-manager="BorderLayout" hgap="0" vgap="0">
+            <constraints border-constraint="Center"/>
+            <properties/>
+            <border type="none"/>
+            <children>
+              <grid id="c9b50" layout-manager="FlowLayout" hgap="5" vgap="5" flow-align="1">
+                <constraints border-constraint="North"/>
+                <properties>
+                  <minimumSize width="250" height="44"/>
+                  <preferredSize width="0" height="50"/>
+                </properties>
+                <border type="none"/>
+                <children>
+                  <component id="792e5" class="javax.swing.JLabel">
+                    <constraints/>
+                    <properties>
+                      <labelFor value="b7a3e"/>
+                      <text value="姓名"/>
+                    </properties>
+                  </component>
+                  <component id="b7a3e" class="javax.swing.JTextField" binding="tfName">
+                    <constraints/>
+                    <properties>
+                      <preferredSize width="130" height="35"/>
+                      <toolTipText value=""/>
+                    </properties>
+                  </component>
+                  <component id="e714f" class="javax.swing.JButton" binding="btnFind" default-binding="true">
+                    <constraints/>
+                    <properties>
+                      <preferredSize width="80" height="40"/>
+                      <text value="查找"/>
+                    </properties>
+                  </component>
+                  <component id="40657" class="javax.swing.JProgressBar" binding="progressBar1" default-binding="true">
+                    <constraints/>
+                    <properties>
+                      <orientation value="0"/>
+                      <preferredSize width="100" height="35"/>
+                    </properties>
+                  </component>
+                </children>
+              </grid>
+            </children>
+          </grid>
+        </children>
+      </grid>
+    </children>
+  </grid>
+</form>

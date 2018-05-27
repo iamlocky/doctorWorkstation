@@ -7,6 +7,7 @@ public class ClinicRegister implements Serializable {
     private Integer department;
     private String doctorID;
     private Integer queueNumber;
+    private Integer hasVisited=0;
 
 
     public String getPatientID() {
@@ -39,5 +40,13 @@ public class ClinicRegister implements Serializable {
 
     public void setQueueNumber(Integer queueNumber) {
         this.queueNumber = queueNumber;
+    }
+
+    public Integer getHasVisited() {
+        return hasVisited;
+    }
+
+    public void setHasVisited(Integer hasVisited) {
+        this.hasVisited = hasVisited;
     }
 }

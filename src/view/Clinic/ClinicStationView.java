@@ -2,6 +2,8 @@ package view.Clinic;
 
 import Utils.FormatUtil;
 import Utils.StringUtil;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import controller.ClinicController;
 import controller.Controller;
 import controller.IControllerListener;
@@ -49,7 +51,7 @@ public class ClinicStationView {
     private TableRowSorter<TableModel> sorter;
 
     public static void main(String[] args) {
-        frame = new JFrame("挂号台---当前登录 " + Controller.getUser().getName() + Controller.getUser().getUsername());
+        frame = new JFrame("挂号台---当前工作人员: " + Controller.getUser().getName() +" "+ Controller.getUser().getUsername());
         frame.setContentPane(new ClinicStationView().panel1);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.pack();
@@ -59,7 +61,7 @@ public class ClinicStationView {
     }
 
     public void renewTable() {
-        String[] columnNames = {"患者", "科室", "医生", "排队号", "流水号", "挂号时间"};
+        String[] columnNames = {"患者", "科室", "医生", "排队号", "流水号", "状态", "挂号时间"};
         Object[][] obj = new Object[datas.size()][columnNames.length];
         try {
             for (int i = 0; i < datas.size(); i++) {
@@ -98,6 +100,9 @@ public class ClinicStationView {
                             obj[i][j] = registerBean.getObjectId();
                             break;
                         case 5:
+                            obj[i][j] = registerBean.getHasVisited()==0?"未就诊":"已就诊";
+                            break;
+                        case 6:
                             obj[i][j] = registerBean.getCreatedAt();
                             break;
                     }
@@ -164,7 +169,7 @@ public class ClinicStationView {
                         ClinicRegisterBean bean=clinicController.findLocalRegister(currentObjectID);
                         String datastr="";
                         if (bean!=null){
-                            datastr= FormatUtil.formatJson(bean.toString());
+                            datastr= FormatUtil.formatJsonPretty(bean);
                         }
                         JOptionPane.showMessageDialog(null,datastr,"挂号详情",JOptionPane.INFORMATION_MESSAGE);
                     } catch (HeadlessException e1) {

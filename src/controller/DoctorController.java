@@ -5,20 +5,18 @@ import com.google.gson.reflect.TypeToken;
 import model.ApiUrl;
 import model.Model;
 import model.OnStringResponseListener;
-import model.bean.ClinicRegisterBean;
-import model.bean.MedicalCase;
-import model.bean.ResultBean;
+import model.bean.*;
 
 import java.lang.reflect.Type;
+import java.util.HashMap;
 
 public class DoctorController {
-    Model model;
     Gson gson = Model.getGson();
     Type type = new Type() {
     };
 
     public DoctorController() {
-        model = new Model();
+
     }
 
     public Type getType() {
@@ -30,17 +28,30 @@ public class DoctorController {
     }
 
     public void getRegister(SimpleListener simpleListener) {
+        Model model = new Model();
         type= new TypeToken<ResultBean<ClinicRegisterBean>>() {
         }.getType();
-        model.getData(ApiUrl.Post.Patient_URL,null, new OnStringResponseListener() {
+        HashMap<String,String> map=new HashMap<>();
+        map.put("doctorID",Controller.getUser().getObjectId());
+        model.getData(ApiUrl.Post.REGISTER_Info+Controller.getToday(),map, new OnStringResponseListener() {
             @Override
             public void onFinish(String responseBean, Exception e) {
                 if (e == null) {
                     try {
+                        if (responseBean.contains("objectId")) {
 
-                        simpleListener.done(gson.fromJson(responseBean, type));
+                            simpleListener.done(gson.fromJson(responseBean, new TypeToken<ResultBean<ClinicRegisterBean>>() {
+                            }.getType()));
+
+                        } else {
+                            if (responseBean.contains("code") && responseBean.contains("error")) {
+                                simpleListener.fail(gson.fromJson(responseBean, ErrInfo.class));
+                            } else
+                                simpleListener.fail(responseBean);
+                        }
                     } catch (Exception e1) {
                         e1.printStackTrace();
+                        simpleListener.fail(e1.getMessage());
                     }
                 } else {
                     simpleListener.fail(e.getMessage());
@@ -50,6 +61,7 @@ public class DoctorController {
     }
 
     public void newMedicalCase(MedicalCase medicalCase,SimpleListener simpleListener) {
+        Model model = new Model();
         model.postData(ApiUrl.Post.Patient_URL, medicalCase, new OnStringResponseListener() {
             @Override
             public void onFinish(String responseBean, Exception e) {

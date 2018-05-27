@@ -39,9 +39,9 @@ public class Controller<T> {
     private static DoctorBean user;
     private static MedicalCase medicalCase;
     public static List<DoctorBean> doctorList;
-    public static HashMap<String,DoctorBean> doctorListMap;
+    public static HashMap<String, DoctorBean> doctorListMap;
     public static List<PatientInfoBean> patientInfoBeanList;
-    public static HashMap<String,PatientInfoBean> patientListMap;
+    public static HashMap<String, PatientInfoBean> patientListMap;
 
     public Controller(IControllerListener<T> iControllerListener, Type type) {
         this.iControllerListener = iControllerListener;
@@ -55,13 +55,13 @@ public class Controller<T> {
 
     public static void setDoctorList(List<DoctorBean> doctorList) {
         Controller.doctorList = doctorList;
-        if (doctorList!=null) {
-            if (doctorListMap!=null) {
+        if (doctorList != null) {
+            if (doctorListMap != null) {
                 doctorListMap.clear();
-            }else
-                doctorListMap=new HashMap<>();
-            for (int i = 0; i <doctorList.size() ; i++) {
-                doctorListMap.put(doctorList.get(i).getObjectId(),doctorList.get(i));
+            } else
+                doctorListMap = new HashMap<>();
+            for (int i = 0; i < doctorList.size(); i++) {
+                doctorListMap.put(doctorList.get(i).getObjectId(), doctorList.get(i));
             }
         }
     }
@@ -72,13 +72,13 @@ public class Controller<T> {
 
     public static void setPatientInfoBeanList(List<PatientInfoBean> patientInfoBeanList) {
         Controller.patientInfoBeanList = patientInfoBeanList;
-        if (patientInfoBeanList!=null) {
-            if (patientListMap!=null) {
+        if (patientInfoBeanList != null) {
+            if (patientListMap != null) {
                 patientListMap.clear();
-            }else
-                patientListMap=new HashMap<>();
-            for (int i = 0; i <patientInfoBeanList.size() ; i++) {
-                patientListMap.put(patientInfoBeanList.get(i).getObjectId(),patientInfoBeanList.get(i));
+            } else
+                patientListMap = new HashMap<>();
+            for (int i = 0; i < patientInfoBeanList.size(); i++) {
+                patientListMap.put(patientInfoBeanList.get(i).getObjectId(), patientInfoBeanList.get(i));
             }
         }
     }
@@ -87,8 +87,8 @@ public class Controller<T> {
         return user;
     }
 
-    public static String getToday(){
-        SimpleDateFormat simpleDateFormat=new SimpleDateFormat("yyyyMMdd");
+    public static String getToday() {
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyyMMdd");
         return simpleDateFormat.format(new Date());
     }
 
@@ -210,11 +210,10 @@ public class Controller<T> {
 
     public void findPatient(Map<String, String> data) {
         Model model = new Model();
-        if (StringUtil.isEmpty(data.get("name")))
-        {
-            data=null;
+        if (StringUtil.isEmpty(data.get("name"))) {
+            data = null;
         }
-            model.getData(ApiUrl.Post.PatientInfo_URL, data, new OnStringResponseListener() {
+        model.getData(ApiUrl.Post.PatientInfo_URL, data, new OnStringResponseListener() {
             @Override
             public void onFinish(String responseBean, Exception e) {
                 if (responseBean.contains("error") || e != null) {
@@ -230,7 +229,7 @@ public class Controller<T> {
         });
     }
 
-    public void getDoctors(){
+    public void getDoctors() {
         Model model = new Model();
         model.getData(ApiUrl.Get.DOCTOR_URL, null, new OnStringResponseListener() {
             @Override
@@ -239,7 +238,7 @@ public class Controller<T> {
                     iControllerListener.showMessage(responseBean + "");
                 } else {
                     try {
-                        ResultBean<DoctorBean> resultBean=gson.fromJson(responseBean, new TypeToken<ResultBean<DoctorBean>>() {
+                        ResultBean<DoctorBean> resultBean = gson.fromJson(responseBean, new TypeToken<ResultBean<DoctorBean>>() {
                         }.getType());
 
                         setDoctorList(resultBean.getResults());
@@ -252,7 +251,7 @@ public class Controller<T> {
         });
     }
 
-    public void getPatientList(){
+    public void getPatientList() {
         Model model = new Model();
         model.getData(ApiUrl.Post.PatientInfo_URL, null, new OnStringResponseListener() {
             @Override
@@ -260,7 +259,7 @@ public class Controller<T> {
                 if (responseBean.contains("error") || e != null) {
                 } else {
                     try {
-                        ResultBean<PatientInfoBean> resultBean=gson.fromJson(responseBean, new TypeToken<ResultBean<PatientInfoBean>>() {
+                        ResultBean<PatientInfoBean> resultBean = gson.fromJson(responseBean, new TypeToken<ResultBean<PatientInfoBean>>() {
                         }.getType());
                         setPatientInfoBeanList(resultBean.getResults());
                     } catch (Exception e1) {
@@ -271,29 +270,27 @@ public class Controller<T> {
         });
     }
 
-    public PatientInfoBean findLocalPatient(String objectId){
-        if (patientInfoBeanList!=null&&!StringUtil.isEmpty(objectId)){
-            print("do find "+objectId);
+    public static PatientInfoBean findLocalPatient(String objectId) {
+        if (patientInfoBeanList != null && !StringUtil.isEmpty(objectId)) {
+            print("do find " + objectId);
             return patientListMap.get(objectId);
-        }else
-        {
+        } else {
             print("do not find ");
             return null;
         }
     }
 
-    public DoctorBean findLocalDoctor(String objectId){
-        if (doctorListMap!=null&&!StringUtil.isEmpty(objectId)){
-            print("do find "+objectId);
+    public static DoctorBean findLocalDoctor(String objectId) {
+        if (doctorListMap != null && !StringUtil.isEmpty(objectId)) {
+            print("do find " + objectId);
             return doctorListMap.get(objectId);
-        }else
-        {
+        } else {
             print("do not find ");
             return null;
         }
     }
 
-    public static void print(Object o){
+    public static void print(Object o) {
         System.out.println(o);
     }
 

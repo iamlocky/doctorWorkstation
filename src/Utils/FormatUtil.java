@@ -1,5 +1,8 @@
 package Utils;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
 /**
  * 格式化输入工具类
  *
@@ -9,7 +12,7 @@ package Utils;
  *
  */
 public final class FormatUtil {
-
+private static Gson gson=new GsonBuilder().serializeNulls().setPrettyPrinting().create();
     /**
      * 打印输入到控制台
      *
@@ -21,6 +24,10 @@ public final class FormatUtil {
         System.out.println(formatJson(jsonStr));
     }
 
+
+    public static String formatJsonPretty(Object o){
+        return gson.toJson(o);
+    }
     /**
      * 格式化
      *

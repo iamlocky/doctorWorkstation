@@ -3,7 +3,6 @@ package model.bean;
 
 public class PatientInfoBean{
     private String objectId;
-    private String id;
     private String name;
     private Integer gender;
     private String phone;
@@ -20,14 +19,6 @@ public class PatientInfoBean{
 
     public void setObjectId(String objectId) {
         this.objectId = objectId;
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
     }
 
     public String getName() {
@@ -105,8 +96,8 @@ public class PatientInfoBean{
 
     @Override
     public String toString() {
-        return "PatientInfo{" +
-                "id='" + id + '\'' +
+        return "PatientInfoBean{" +
+                "objectId='" + objectId + '\'' +
                 ", name='" + name + '\'' +
                 ", gender=" + gender +
                 ", phone='" + phone + '\'' +

@@ -1,8 +1,9 @@
 package model.bean;
 
 
+import com.google.gson.GsonBuilder;
+
 public class PatientInfo {
-    private String id;
     private String name;
     private Integer gender;
     private String phone;
@@ -13,13 +14,7 @@ public class PatientInfo {
     private String insuranceNumber;
 
 
-    public String getId() {
-        return id;
-    }
 
-    public void setId(String id) {
-        this.id = id;
-    }
 
     public String getName() {
         return name;
@@ -94,8 +89,7 @@ public class PatientInfo {
     @Override
     public String toString() {
         return "PatientInfo{" +
-                "id='" + id + '\'' +
-                ", name='" + name + '\'' +
+                "name='" + name + '\'' +
                 ", gender=" + gender +
                 ", phone='" + phone + '\'' +
                 ", birth='" + birth + '\'' +

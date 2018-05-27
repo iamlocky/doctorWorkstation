@@ -1,6 +1,7 @@
 package view.Clinic;
 
 import Utils.FormatUtil;
+import com.google.gson.Gson;
 import controller.Controller;
 import model.ApiUrl;
 import model.Model;
@@ -36,6 +37,7 @@ public class test {
 //        callPrinter(Controller.getToday());
         int i= JOptionPane.showConfirmDialog(null,"该患者当天已挂号，确认继续挂号？");
         print(i);
+
     }
 
 

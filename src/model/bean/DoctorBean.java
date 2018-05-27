@@ -11,7 +11,7 @@ public class DoctorBean implements Serializable{
     private Integer department=-1;
     private String updatedAt;
     private String username;
-
+    private String name;
 
 
     public String getCreatedAt() {
@@ -54,12 +54,27 @@ public class DoctorBean implements Serializable{
         this.username = username;
     }
 
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
     @Override
     public String toString() {
-        return Model.getGson().toJson(this);
+        return "DoctorBean{" +
+                "createdAt='" + createdAt + '\'' +
+                ", objectId='" + objectId + '\'' +
+                ", department=" + department +
+                ", updatedAt='" + updatedAt + '\'' +
+                ", username='" + username + '\'' +
+                ", name='" + name + '\'' +
+                '}';
     }
 
     public Pointer toPointer() {
-        return new Pointer("Pointer",getClass().getName(),objectId);
+        return new Pointer("Pointer","User",objectId);
     }
 }

@@ -1,9 +1,11 @@
 package view.Clinic;
 
 import com.google.gson.reflect.TypeToken;
+import controller.ClinicController;
 import controller.Controller;
 import controller.IControllerListener;
 import controller.SimpleListener;
+import model.Model;
 import model.bean.*;
 import view.ViewUtils;
 
@@ -25,8 +27,10 @@ public class AddRegister {
     private JTextField tfID;
     private JComboBox comboBox1;
     private JComboBox comboBox2;
+    private JProgressBar progressBar1;
     private PatientInfoBean patientInfo;
     private Controller controller;
+    private ClinicController clinicController;
     public ResultBean<DoctorBean> dataRaw;
     private List<DoctorBean> doctorsResult;
 
@@ -34,7 +38,9 @@ public class AddRegister {
         if (frame!=null){
             frame.dispose();
         }
-        frame = new JFrame("新建挂号");
+        frame = new JFrame("新建挂号"){
+
+        };
         frame.setContentPane(new AddRegister().panel);
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         frame.pack();
@@ -46,6 +52,8 @@ public class AddRegister {
     public void initView() {
         panel.setBorder(new EmptyBorder(10, 10, 10, 10));
         ViewUtils.changeFont(panel);
+        progressBar1.setVisible(false);
+
     }
 
     public void renewDoctorCombox(){
@@ -60,11 +68,13 @@ public class AddRegister {
         }
         comboBox2.removeAllItems();
         for (int i = 0; i <doctorsResult.size() ; i++) {
-            comboBox2.addItem(doctorsResult.get(i).getUsername());
+            comboBox2.addItem(doctorsResult.get(i).getName());
         }
     }
 
     public AddRegister() {
+        clinicController=new ClinicController();
+
         controller=new Controller(new IControllerListener<ResultBean<DoctorBean>>() {
 
             @Override
@@ -103,6 +113,38 @@ public class AddRegister {
             }
         });
 
+        btnOK.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                ClinicRegister clinicRegister=new ClinicRegister();
+                clinicRegister.setDepartment(comboBox1.getSelectedIndex());
+                clinicRegister.setPatientID(patientInfo.getObjectId());
+                clinicRegister.setDoctorID(doctorsResult.get(comboBox2.getSelectedIndex()).getObjectId());
+                Model.log(Model.getGson().toJson(clinicRegister));
+                progressBar1.setVisible(true);
+                clinicController.newRegister(clinicRegister, new SimpleListener() {
+                    @Override
+                    public void done(Object data) {
+                        progressBar1.setVisible(false);
+                        JOptionPane.showMessageDialog(null,data," 挂号成功！", JOptionPane.INFORMATION_MESSAGE);
+
+                    }
+
+                    @Override
+                    public void fail(ErrInfo errInfo) {
+                        progressBar1.setVisible(false);
+                        JOptionPane.showMessageDialog(null,"失败"," 挂号失败！", JOptionPane.INFORMATION_MESSAGE);
+                    }
+
+                    @Override
+                    public void fail(String s) {
+                        progressBar1.setVisible(false);
+                        JOptionPane.showMessageDialog(null,s," 挂号失败！", JOptionPane.INFORMATION_MESSAGE);
+
+                    }
+                });
+            }
+        });
     }
 
     public void showFindWindow(){

@@ -19,7 +19,7 @@ public class Main {
             public void run() {
                 try {
                     UIManager.setLookAndFeel(new SubstanceGraphiteAquaLookAndFeel());
-                    testData=new String[]{"张三","123"};
+                    testData=new String[]{"2017001","123"};
                     LoginView.main(testData);
                 } catch (Exception e) {
                     System.out.println("Substance Graphite failed to initialize");

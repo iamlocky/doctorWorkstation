@@ -1,5 +1,6 @@
 package view.Doctor;
 
+import controller.Controller;
 import controller.DoctorController;
 import view.ViewUtils;
 
@@ -14,7 +15,7 @@ import java.awt.event.ActionListener;
 
 public class DoctorStationView {
     public static void main(String[] args) {
-        frame = new JFrame("医生工作站");
+        frame = new JFrame("医生工作站---当前登录 "+ Controller.getUser().getName()+Controller.getUser().getUsername());
         new DoctorStationView();
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.pack();

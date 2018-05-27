@@ -15,6 +15,7 @@ import java.lang.reflect.Type;
 import java.net.URLEncoder;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 public class Model<E> {
@@ -287,7 +288,7 @@ public class Model<E> {
      * @param data           要传的值
      * @param responseListener 返回 List<T> 数据
      */
-    public void getData(String apiUrl_Get, Object data, final @NotNull OnStringResponseListener responseListener) {
+    public void getData(String apiUrl_Get, Map<String,String> data, final @NotNull OnStringResponseListener responseListener) {
         String finalUrl=apiUrl_Get;
         if (data == null) {
             log("getdata params is null");
@@ -415,7 +416,7 @@ public class Model<E> {
         client = new OkHttpClient.Builder().connectTimeout(connectTimeout, TimeUnit.SECONDS)
                 .readTimeout(readOrWriteTimeout, TimeUnit.SECONDS)
                 .writeTimeout(readOrWriteTimeout, TimeUnit.SECONDS).build();
-        requestBuilder = new Request.Builder().url(apiUrl_Del + id);
+        requestBuilder = new Request.Builder().url(apiUrl_Del + "/"+id);
 
         requestBuilder.addHeader("X-Bmob-Application-Id", Akey.appId);
         requestBuilder.addHeader("X-Bmob-REST-API-Key", Akey.restId);
@@ -503,7 +504,7 @@ public class Model<E> {
         });
     }
 
-    public void log(Object msg){
+    public static void log(Object msg){
         System.out.println("\n------------------------------------");
         StackTraceElement[] trace = new Throwable().getStackTrace();
         for (StackTraceElement traceElement : trace)

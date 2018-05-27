@@ -4,9 +4,7 @@ import Utils.StringUtil;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
-import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
-import Utils.AESUtil;
 import model.ApiUrl;
 import model.Model;
 import model.OnStringResponseListener;
@@ -19,6 +17,9 @@ import javax.print.attribute.HashPrintRequestAttributeSet;
 import javax.swing.*;
 import java.io.*;
 import java.lang.reflect.Type;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -30,31 +31,65 @@ import java.util.Map;
 public class Controller<T> {
 
     private T data;
-
     private IControllerListener<T> iControllerListener;
     private Gson gson = new GsonBuilder().serializeNulls().create();
     private String jsonData;
     File file = new File("data.txt");
     private Type type;
-    private static User user = new User();
+    private static DoctorBean user;
     private static MedicalCase medicalCase;
+    public static List<DoctorBean> doctorList;
+    public static HashMap<String,DoctorBean> doctorListMap;
+    public static List<PatientInfoBean> patientInfoBeanList;
+    public static HashMap<String,PatientInfoBean> patientListMap;
 
     public Controller(IControllerListener<T> iControllerListener, Type type) {
         this.iControllerListener = iControllerListener;
         this.type = type;
+        getPatientList();
     }
 
-    public static MedicalCase getMedicalCase() {
-        return medicalCase;
+    public static List<DoctorBean> getDoctorList() {
+        return doctorList;
     }
 
-    public static void setMedicalCase(MedicalCase medicalCase) {
-        Controller.medicalCase = medicalCase;
+    public static void setDoctorList(List<DoctorBean> doctorList) {
+        Controller.doctorList = doctorList;
+        if (doctorList!=null) {
+            if (doctorListMap!=null) {
+                doctorListMap.clear();
+            }else
+                doctorListMap=new HashMap<>();
+            for (int i = 0; i <doctorList.size() ; i++) {
+                doctorListMap.put(doctorList.get(i).getObjectId(),doctorList.get(i));
+            }
+        }
     }
 
+    public static List<PatientInfoBean> getPatientInfoBeanList() {
+        return patientInfoBeanList;
+    }
 
-    public static User getUser() {
+    public static void setPatientInfoBeanList(List<PatientInfoBean> patientInfoBeanList) {
+        Controller.patientInfoBeanList = patientInfoBeanList;
+        if (patientInfoBeanList!=null) {
+            if (patientListMap!=null) {
+                patientListMap.clear();
+            }else
+                patientListMap=new HashMap<>();
+            for (int i = 0; i <patientInfoBeanList.size() ; i++) {
+                patientListMap.put(patientInfoBeanList.get(i).getObjectId(),patientInfoBeanList.get(i));
+            }
+        }
+    }
+
+    public static DoctorBean getUser() {
         return user;
+    }
+
+    public static String getToday(){
+        SimpleDateFormat simpleDateFormat=new SimpleDateFormat("yyyyMMdd");
+        return simpleDateFormat.format(new Date());
     }
 
     public void login(String u, String p) {
@@ -72,7 +107,7 @@ public class Controller<T> {
                         iControllerListener.doneRaw(responseBean);
                     } else {
                         data = Model.getGson().fromJson(responseBean, type);
-                        user = (User) data;
+                        user = (DoctorBean) data;
                         iControllerListener.done(data);
                     }
                 } catch (Exception e1) {
@@ -82,7 +117,7 @@ public class Controller<T> {
         });
     }
 
-    public static void print(String s) {
+    public static void callPrinter(String s) {
         HashPrintRequestAttributeSet pras = new HashPrintRequestAttributeSet();
         // 设置打印格式，因为未确定类型，所以选择autosense
         DocFlavor flavor = DocFlavor.INPUT_STREAM.AUTOSENSE;
@@ -204,14 +239,62 @@ public class Controller<T> {
                     iControllerListener.showMessage(responseBean + "");
                 } else {
                     try {
-                        iControllerListener.done(gson.fromJson(responseBean, new TypeToken<ResultBean<DoctorBean>>() {
-                        }.getType()));
+                        ResultBean<DoctorBean> resultBean=gson.fromJson(responseBean, new TypeToken<ResultBean<DoctorBean>>() {
+                        }.getType());
+
+                        setDoctorList(resultBean.getResults());
+                        iControllerListener.done((T) resultBean);
                     } catch (Exception e1) {
                         e1.printStackTrace();
                     }
                 }
             }
         });
+    }
+
+    public void getPatientList(){
+        Model model = new Model();
+        model.getData(ApiUrl.Post.PatientInfo_URL, null, new OnStringResponseListener() {
+            @Override
+            public void onFinish(String responseBean, Exception e) {
+                if (responseBean.contains("error") || e != null) {
+                } else {
+                    try {
+                        ResultBean<PatientInfoBean> resultBean=gson.fromJson(responseBean, new TypeToken<ResultBean<PatientInfoBean>>() {
+                        }.getType());
+                        setPatientInfoBeanList(resultBean.getResults());
+                    } catch (Exception e1) {
+                        e1.printStackTrace();
+                    }
+                }
+            }
+        });
+    }
+
+    public PatientInfoBean findLocalPatient(String objectId){
+        if (patientInfoBeanList!=null&&!StringUtil.isEmpty(objectId)){
+            print("do find"+objectId);
+            return patientListMap.get(objectId);
+        }else
+        {
+            print("do not find");
+            return null;
+        }
+    }
+
+    public DoctorBean findLocalDoctor(String objectId){
+        if (doctorListMap!=null&&!StringUtil.isEmpty(objectId)){
+            print("do find"+objectId);
+            return doctorListMap.get(objectId);
+        }else
+        {
+            print("do not find");
+            return null;
+        }
+    }
+
+    public static void print(Object o){
+        System.out.println(o);
     }
 
     public void findDoctor(Map<String, String> data) {

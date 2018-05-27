@@ -120,6 +120,6 @@ public class PatientInfoBean{
     }
 
     public Pointer toPointer() {
-        return new Pointer("Pointer",getClass().getName(),objectId);
+        return new Pointer("Pointer","PatientInfo",objectId);
     }
 }

@@ -5,6 +5,7 @@ import controller.Controller;
 import controller.IControllerListener;
 import model.Model;
 import Utils.StringUtil;
+import model.bean.DoctorBean;
 import model.bean.ErrInfo;
 import model.bean.User;
 import view.Doctor.DoctorStationView;
@@ -15,7 +16,7 @@ import javax.swing.border.EmptyBorder;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class LoginView implements IControllerListener<User> {
+public class LoginView implements IControllerListener<DoctorBean> {
     private static JFrame frame;
     private static String[] args1;
     private JPanel panel1;
@@ -27,7 +28,7 @@ public class LoginView implements IControllerListener<User> {
     private JRadioButton radioButton2;
     private ButtonGroup buttonGroup;
     private Gson gson = Model.getGson();
-    private Controller controller = new Controller(this, User.class);
+    private Controller controller = new Controller(this, DoctorBean.class);
 
     private int type = 0;
 
@@ -89,7 +90,7 @@ public class LoginView implements IControllerListener<User> {
     }
 
     @Override
-    public void done(User data) {
+    public void done(DoctorBean data) {
         if (data == null)
             return;
         progressBar1.setVisible(false);
@@ -109,7 +110,7 @@ public class LoginView implements IControllerListener<User> {
             e.printStackTrace();
         }
         frame.dispose();
-        JOptionPane.showMessageDialog(null, "员工 " + data.getUsername() + " 登录成功！", "欢迎", JOptionPane.INFORMATION_MESSAGE);
+//        JOptionPane.showMessageDialog(null, "员工 " + data.getUsername() + " 登录成功！", "欢迎", JOptionPane.INFORMATION_MESSAGE);
 
     }
 
@@ -122,8 +123,8 @@ public class LoginView implements IControllerListener<User> {
             e.printStackTrace();
         }
 
-        JOptionPane.showMessageDialog(null, errInfo.getError() == null ? data : "错误码：" + errInfo.getCode() + "\n" +
-                "信息：" + errInfo.getError(), "登录失败", JOptionPane.ERROR_MESSAGE);
+        JOptionPane.showMessageDialog(null, errInfo.getError() == null ? "" : ("错误码：" + errInfo.getCode() + "\n" +
+                "信息：" + errInfo.getError()), "登录失败", JOptionPane.ERROR_MESSAGE);
         progressBar1.setVisible(false);
 
     }

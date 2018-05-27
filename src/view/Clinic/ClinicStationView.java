@@ -1,5 +1,6 @@
 package view.Clinic;
 
+import Utils.FormatUtil;
 import Utils.StringUtil;
 import controller.ClinicController;
 import controller.Controller;
@@ -11,9 +12,12 @@ import view.ViewUtils;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
+import java.awt.*;
 import java.awt.event.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -33,6 +37,7 @@ public class ClinicStationView {
     private JTextField tfFindByName;
     private JButton btnRefresh;
     private JProgressBar progressBar1;
+    private JButton btnClear;
     private ClinicController clinicController;
     private Controller controller;
     private JTable table;
@@ -41,6 +46,7 @@ public class ClinicStationView {
     private Timer timer;
     private int index = -1;
     private String currentObjectID = "";
+    private TableRowSorter<TableModel> sorter;
 
     public static void main(String[] args) {
         frame = new JFrame("挂号台---当前登录 " + Controller.getUser().getName() + Controller.getUser().getUsername());
@@ -62,8 +68,12 @@ public class ClinicStationView {
                     switch (j) {
                         case 0:
                             String name0=registerBean.getPatientID();
-                            if (controller.findLocalPatient(name0)!=null){
-                                name0=controller.findLocalPatient(name0).getName();
+                            PatientInfoBean patientInfoBean=controller.findLocalPatient(name0);
+                            if (patientInfoBean!=null){
+                                if (registerBean.getPatientInfoBean()==null) {
+                                    registerBean.setPatientInfoBean(patientInfoBean);
+                                }
+                                name0=patientInfoBean.getName();
                             }
                             obj[i][j] = name0;
                             break;
@@ -72,8 +82,12 @@ public class ClinicStationView {
                             break;
                         case 2:
                             String name1=registerBean.getDoctorID();
-                            if (controller.findLocalDoctor(name1)!=null){
-                                name1=controller.findLocalDoctor(name1).getName();
+                            DoctorBean doctorBean=controller.findLocalDoctor(name1);
+                            if (doctorBean!=null){
+                                if (registerBean.getDoctorBean()==null) {
+                                    registerBean.setDoctorBean(doctorBean);
+                                }
+                                name1=doctorBean.getName();
                             }
                             obj[i][j] = name1;
                             break;
@@ -96,11 +110,12 @@ public class ClinicStationView {
             };
             table.clearSelection();
             table.setModel(tableModel);
-            TableRowSorter<TableModel> sorter = new TableRowSorter<TableModel>(tableModel);
+            sorter = new TableRowSorter<TableModel>(tableModel);
             List<RowSorter.SortKey> sortKeys = new ArrayList<RowSorter.SortKey>();
             sortKeys.add(new RowSorter.SortKey(5, SortOrder.DESCENDING));
             sorter.setSortKeys(sortKeys);
             table.setRowSorter(sorter);
+            renewFindFilter();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -113,6 +128,7 @@ public class ClinicStationView {
         panel1.setBorder(new EmptyBorder(10, 10, 10, 10));
         ViewUtils.changeFont(panel1);
         progressBar1.setVisible(false);
+
         controller = new Controller(new IControllerListener<ResultBean<DoctorBean>>() {
             @Override
             public void done(ResultBean<DoctorBean> data) {
@@ -130,6 +146,7 @@ public class ClinicStationView {
 
             }
         }, null);
+
         controller.getDoctors();
         clinicController = new ClinicController();
 //        renewRegisterList();
@@ -142,9 +159,17 @@ public class ClinicStationView {
             public void mouseClicked(MouseEvent e) {
                 index = table.getSelectedRow();
                 if (e.getClickCount() == 2) {
-                    int row = ((JTable) e.getSource()).rowAtPoint(e.getPoint()); //获得行位置
-
-//                    JOptionPane.showMessageDialog(null,row," ",JOptionPane.INFORMATION_MESSAGE);
+                    currentObjectID = (String) table.getValueAt(index, 4);
+                    try {
+                        ClinicRegisterBean bean=clinicController.findLocalRegister(currentObjectID);
+                        String datastr="";
+                        if (bean!=null){
+                            datastr= FormatUtil.formatJson(bean.toString());
+                        }
+                        JOptionPane.showMessageDialog(null,datastr,"挂号详情",JOptionPane.INFORMATION_MESSAGE);
+                    } catch (HeadlessException e1) {
+                        e1.printStackTrace();
+                    }
                 }
             }
         });
@@ -185,8 +210,50 @@ public class ClinicStationView {
         });
     }
 
+    public void renewFindFilter(){
+        if (!StringUtil.isEmpty(tfFindByName.getText())) {
+            if (sorter!=null){
+                sorter.setRowFilter(RowFilter.regexFilter(tfFindByName.getText()));
+            }
+        }else {
+            if (sorter!=null){
+                sorter.setRowFilter(null);
+            }
+        }
+    }
+
     public ClinicStationView() {
         initView();
+
+        tfFindByName.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyPressed(KeyEvent e) {
+                super.keyPressed(e);
+                if(e.getKeyChar()==KeyEvent.VK_ENTER )
+                {
+                    renewFindFilter();
+                }
+            }
+        });
+        tfFindByName.getDocument().addDocumentListener(new DocumentListener() {
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                renewFindFilter();
+
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                renewFindFilter();
+
+            }
+
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                renewFindFilter();
+
+            }
+        });
         btn1.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -212,7 +279,7 @@ public class ClinicStationView {
                     index=table.getSelectedRow();
                     currentObjectID = (String) table.getValueAt(index, 4);
                     if (!StringUtil.isEmpty(currentObjectID)) {
-                        PatientInfoBean patientInfoBean=controller.findLocalPatient(datas.get(index).getPatientID());
+                        PatientInfoBean patientInfoBean=controller.findLocalPatient(clinicController.findLocalRegister(currentObjectID).getPatientID());
                         String msg="";
                         if (patientInfoBean!=null){
                             msg=patientInfoBean.getName();
@@ -249,6 +316,12 @@ public class ClinicStationView {
             public void actionPerformed(ActionEvent e) {
                 renewRegisterList();
 
+            }
+        });
+        btnClear.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                tfFindByName.setText("");
             }
         });
     }

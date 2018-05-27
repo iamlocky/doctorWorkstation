@@ -110,6 +110,13 @@
               <preferredSize width="0" height="30"/>
             </properties>
           </component>
+          <component id="ad77d" class="javax.swing.JButton" binding="btnClear">
+            <constraints border-constraint="East"/>
+            <properties>
+              <preferredSize width="50" height="35"/>
+              <text value="清空"/>
+            </properties>
+          </component>
         </children>
       </grid>
     </children>

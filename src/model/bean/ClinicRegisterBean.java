@@ -75,4 +75,18 @@ public class ClinicRegisterBean implements Serializable {
     public void setCreatedAt(String createdAt) {
         this.createdAt = createdAt;
     }
+
+    @Override
+    public String toString() {
+        return "ClinicRegisterBean{" +
+                "PatientID='" + PatientID + '\'' +
+                ", department=" + department +
+                ", doctorID='" + doctorID + '\'' +
+                ", patientInfoBean=" + patientInfoBean +
+                ", doctorBean=" + doctorBean +
+                ", objectId='" + objectId + '\'' +
+                ", createdAt='" + createdAt + '\'' +
+                ", queueNumber=" + queueNumber +
+                '}';
+    }
 }

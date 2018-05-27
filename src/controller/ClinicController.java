@@ -1,5 +1,6 @@
 package controller;
 
+import Utils.StringUtil;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import model.ApiUrl;
@@ -13,6 +14,8 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 
 public class ClinicController {
+    List<ClinicRegisterBean> clinicRegisterList;
+    HashMap<String,ClinicRegisterBean> clinicRegisterListMap;
     private Gson gson = Model.getGson();
     private Type type = new Type() {
     };
@@ -27,6 +30,31 @@ public class ClinicController {
     }
 
     public ClinicController() {
+    }
+
+    public List<ClinicRegisterBean> getClinicRegisterList() {
+        return clinicRegisterList;
+    }
+
+    public void setClinicRegisterList(List<ClinicRegisterBean> clinicRegisterList) {
+        this.clinicRegisterList = clinicRegisterList;
+        if (clinicRegisterList!=null) {
+            if (clinicRegisterListMap!=null) {
+                clinicRegisterListMap.clear();
+            }else
+                clinicRegisterListMap=new HashMap<>();
+            for (int i = 0; i <clinicRegisterList.size() ; i++) {
+                clinicRegisterListMap.put(clinicRegisterList.get(i).getObjectId(),clinicRegisterList.get(i));
+            }
+        }
+    }
+
+    public HashMap<String, ClinicRegisterBean> getClinicRegisterListMap() {
+        return clinicRegisterListMap;
+    }
+
+    public void setClinicRegisterListMap(HashMap<String, ClinicRegisterBean> clinicRegisterListMap) {
+        this.clinicRegisterListMap = clinicRegisterListMap;
     }
 
     public void newPatientInfo(PatientInfo patientInfo, SimpleListener simpleListener) {
@@ -102,7 +130,7 @@ public class ClinicController {
                 if (e == null) {
                     try {
                         if (!responseBean.contains("code")&&!responseBean.contains("error")) {
-                            simpleListener.done("挂号成功，排队号"+clinicRegister.getQueueNumber()+"\n"+responseBean);
+                            simpleListener.done("挂号成功，排队号 "+clinicRegister.getQueueNumber()+"\n"+responseBean);
                         }else {
                             simpleListener.fail(responseBean);
                         }
@@ -132,6 +160,41 @@ public class ClinicController {
         });
     }
 
+    public ClinicRegisterBean findLocalRegister(String objectId){
+        if (clinicRegisterListMap!=null&&!StringUtil.isEmpty(objectId)){
+            print("do find "+objectId);
+            return clinicRegisterListMap.get(objectId);
+        }else
+        {
+            print("do not find ");
+            return null;
+        }
+    }
+
+    public List<ClinicRegisterBean> findLocalRegisterByName(String name){
+        if (clinicRegisterList!=null&&!StringUtil.isEmpty(name)){
+            print("do find "+name);
+            try {
+                List<ClinicRegisterBean> result=new ArrayList<>();
+                List<PatientInfoBean> registerBeanList=Controller.getPatientInfoBeanList();
+                for (int i = 0; i <registerBeanList.size() ; i++) {
+                    Controller.getPatientInfoBeanList();
+                }
+                return null;
+            } catch (Exception e) {
+                e.printStackTrace();
+                return null;
+            }
+        }else
+        {
+            print("do not find ");
+            return null;
+        }
+    }
+
+    public static void print(Object o){
+        System.out.println(o);
+    }
     public void getRegisterList(SimpleListener simpleListener) {
         String date=Controller.getToday();
         Model model=new Model();
@@ -146,7 +209,7 @@ public class ClinicController {
                             }.getType();
                             ResultBean<ClinicRegisterBean> resultBean=gson.fromJson(responseBean,type);
                             List<ClinicRegisterBean> clinicRegisterBeans=resultBean.getResults();
-
+                            setClinicRegisterList(clinicRegisterBeans);
                             simpleListener.done(clinicRegisterBeans);
                         }else {
                                 simpleListener.done(new ArrayList<>());
@@ -161,6 +224,7 @@ public class ClinicController {
             }
         });
     }
+
 
     public void getQueueNumber(ClinicRegister clinicRegister, SimpleListener simpleListener) {
         String date=Controller.getToday();

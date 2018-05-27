@@ -273,22 +273,22 @@ public class Controller<T> {
 
     public PatientInfoBean findLocalPatient(String objectId){
         if (patientInfoBeanList!=null&&!StringUtil.isEmpty(objectId)){
-            print("do find"+objectId);
+            print("do find "+objectId);
             return patientListMap.get(objectId);
         }else
         {
-            print("do not find");
+            print("do not find ");
             return null;
         }
     }
 
     public DoctorBean findLocalDoctor(String objectId){
         if (doctorListMap!=null&&!StringUtil.isEmpty(objectId)){
-            print("do find"+objectId);
+            print("do find "+objectId);
             return doctorListMap.get(objectId);
         }else
         {
-            print("do not find");
+            print("do not find ");
             return null;
         }
     }

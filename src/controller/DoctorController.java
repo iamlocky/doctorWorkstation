@@ -10,13 +10,33 @@ import model.bean.*;
 import java.lang.reflect.Type;
 import java.util.HashMap;
 
-public class DoctorController {
+public class DoctorController extends Controller{
     Gson gson = Model.getGson();
     Type type = new Type() {
     };
 
-    public DoctorController() {
 
+    public DoctorController() {
+        super(new IControllerListener() {
+            @Override
+            public void done(Object data) {
+
+            }
+
+            @Override
+            public void doneRaw(String data) {
+
+            }
+
+            @Override
+            public void showMessage(String msg) {
+
+            }
+        },null);
+    }
+
+    public DoctorController(IControllerListener iControllerListener,Type type) {
+        super(iControllerListener,type);
     }
 
     public Type getType() {
@@ -78,7 +98,4 @@ public class DoctorController {
         });
     }
 
-    public void print(Object object){
-        Controller.callPrinter("callPrinter.txt");
-    }
 }

@@ -76,6 +76,10 @@ public class AddPatient{
                     JOptionPane.showMessageDialog(null, "不能为空", "提示", JOptionPane.ERROR_MESSAGE);
                     return;
                 }
+                if (name.length()<2||StringUtil.isNumeric(name)){
+                    JOptionPane.showMessageDialog(null, "姓名不正确", "提示", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
                 if (idNumber.length()!=18){
                     JOptionPane.showMessageDialog(null, "身份证号不正确", "提示", JOptionPane.ERROR_MESSAGE);
                     return;

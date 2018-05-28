@@ -162,11 +162,11 @@ public class ClinicController {
 
     public ClinicRegisterBean findLocalRegister(String objectId){
         if (clinicRegisterListMap!=null&&!StringUtil.isEmpty(objectId)){
-            print("do find "+objectId);
+//            print("do find "+objectId);
             return clinicRegisterListMap.get(objectId);
         }else
         {
-            print("do not find ");
+//            print("do not find ");
             return null;
         }
     }

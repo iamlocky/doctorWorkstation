@@ -5,6 +5,7 @@ import Utils.StringUtil;
 import controller.Controller;
 import model.bean.ClinicRegisterBean;
 import model.bean.PatientInfoBean;
+import view.Doctor.AddMedicalCase;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
@@ -14,9 +15,9 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
-public class ItemView {
+public class ItemView extends JComponent{
     public JPanel panel1;
-    public JPanel panelmain;
+    public JPanel panelmain;//
     public JLabel lbName;
     private JButton btnRecept;
     public JLabel lb1;
@@ -24,17 +25,29 @@ public class ItemView {
     public JLabel lb3;
     public JLabel lb4;
     private JPanel paneldetail;
-    public PatientInfoBean patientInfoBean;
-    private Color color;
-    ClinicRegisterBean clinicRegisterBean;
+    private JLabel lb5;
+    private JLabel lb6;
 
-    public ItemView(ClinicRegisterBean clinicRegisterBean) {
+    public PatientInfoBean patientInfoBean;
+    public ClinicRegisterBean clinicRegisterBean;
+    private Color color;
+
+    public ItemView(ClinicRegisterBean clinicRegisterBean,String...params) {
         this.clinicRegisterBean=clinicRegisterBean;
+        if (params!=null&&params.length>0){
+            lb6.setVisible(true);
+            btnRecept.setVisible(false);
+        }else {
+            lb6.setVisible(false);
+            btnRecept.setVisible(true);
+        }
+
         panelmain.setBorder(new EmptyBorder(5, 5, 5, 5));
         btnRecept.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                print(e);
+//                JOptionPane.showMessageDialog(null,"!!!","接诊",JOptionPane.INFORMATION_MESSAGE);
+                AddMedicalCase.main(clinicRegisterBean,patientInfoBean);
             }
         });
         paneldetail.setBackground(null);
@@ -46,7 +59,20 @@ public class ItemView {
                 lb1.setText(patientInfoBean.getGender()==0?"男":"女");
                 lb2.setText(clinicRegisterBean.getQueueNumber()+"号");
                 lb3.setText((Integer.parseInt(Controller.getToday().substring(0,4))-Integer.parseInt(patientInfoBean.getBirth().substring(0,4)))+"岁");
-                lb4.setText(StringUtil.isEmpty(patientInfoBean.getDrugAllergies())?"无过敏史":patientInfoBean.getDrugAllergies());
+                lb4.setText(clinicRegisterBean.getDepartment()==0?"内科":"外科");
+                if (lb6.isVisible()){
+                    lb5.setText(patientInfoBean.getIdCardNumber());
+                    lb6.setText(patientInfoBean.getObjectId());
+                }else {
+                    lb5.setText(patientInfoBean.getObjectId());
+
+                    lb6.setPreferredSize(new Dimension(0,0));
+                    lb6.setMinimumSize(new Dimension(0,0));
+                }
+                if (clinicRegisterBean.getHasVisited()==1){
+                    btnRecept.setText("继续接诊");
+                }
+                panelmain.setToolTipText(clinicRegisterBean.getCreatedAt());
             }
         } catch (Exception e) {
             e.printStackTrace();

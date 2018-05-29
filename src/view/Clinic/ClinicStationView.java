@@ -46,15 +46,21 @@ public class ClinicStationView {
     private int index = -1;
     private String currentObjectID = "";
     private TableRowSorter<TableModel> sorter;
+    private static boolean exit=true;
 
-    public static void main(String[] args) {
+    public static void main(String...args) {
         frame = new JFrame("挂号台---当前工作人员: " + Controller.getUser().getName() +" "+ Controller.getUser().getUsername());
         frame.setContentPane(new ClinicStationView().panel1);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.pack();
         frame.setVisible(true);
         ViewUtils.toCenter(frame);
-
+        if (args!=null&&args.length>0){
+            if (args[0].equals("false")){
+                exit=false;
+                frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+            }
+        }
     }
 
     public void renewTable() {
@@ -285,6 +291,10 @@ public class ClinicStationView {
                         String msg="";
                         if (patientInfoBean!=null){
                             msg=patientInfoBean.getName();
+                        }
+                        if ((table.getValueAt(index, 5)).equals("已就诊")){
+                            JOptionPane.showMessageDialog(null, "已就诊无法取消！", "提示", JOptionPane.INFORMATION_MESSAGE);
+                            return;
                         }
                         int i = JOptionPane.showConfirmDialog(null, "确认取消当前"+msg+"的挂号？");
                         if (i != 0) {

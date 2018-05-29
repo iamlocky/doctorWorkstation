@@ -10,13 +10,6 @@
     </properties>
     <border type="none"/>
     <children>
-      <component id="18054" class="javax.swing.JProgressBar" binding="progressBar1" default-binding="true">
-        <constraints border-constraint="South"/>
-        <properties>
-          <indeterminate value="true"/>
-          <preferredSize width="0" height="20"/>
-        </properties>
-      </component>
       <grid id="6404a" layout-manager="BorderLayout" hgap="0" vgap="0">
         <constraints border-constraint="North"/>
         <properties/>
@@ -31,15 +24,6 @@
               <text value="医生工作站"/>
             </properties>
           </component>
-          <component id="4d82e" class="javax.swing.JButton" binding="btnrefresh">
-            <constraints border-constraint="East"/>
-            <properties>
-              <maximumSize width="56" height="10"/>
-              <minimumSize width="56" height="10"/>
-              <preferredSize width="56" height="10"/>
-              <text value="刷新"/>
-            </properties>
-          </component>
           <grid id="51064" layout-manager="BorderLayout" hgap="0" vgap="0">
             <constraints border-constraint="West"/>
             <properties>
@@ -47,6 +31,62 @@
             </properties>
             <border type="none"/>
             <children/>
+          </grid>
+        </children>
+      </grid>
+      <grid id="d3e9d" layout-manager="BorderLayout" hgap="0" vgap="0">
+        <constraints border-constraint="South"/>
+        <properties/>
+        <border type="none"/>
+        <children>
+          <component id="18054" class="javax.swing.JProgressBar" binding="progressBar1" default-binding="true">
+            <constraints border-constraint="North"/>
+            <properties>
+              <indeterminate value="true"/>
+              <preferredSize width="0" height="20"/>
+            </properties>
+          </component>
+          <grid id="21991" layout-manager="FlowLayout" hgap="5" vgap="5" flow-align="2">
+            <constraints border-constraint="Center"/>
+            <properties/>
+            <border type="none"/>
+            <children>
+              <component id="7cac3" class="javax.swing.JLabel" binding="lbqueue">
+                <constraints/>
+                <properties>
+                  <horizontalAlignment value="0"/>
+                  <minimumSize width="100" height="25"/>
+                  <preferredSize width="200" height="25"/>
+                  <text value="今日挂号"/>
+                </properties>
+              </component>
+              <component id="5432e" class="javax.swing.JLabel" binding="lbtime">
+                <constraints/>
+                <properties>
+                  <horizontalAlignment value="0"/>
+                  <minimumSize width="100" height="25"/>
+                  <preferredSize width="200" height="25"/>
+                  <text value="北京时间"/>
+                </properties>
+              </component>
+              <component id="4d82e" class="javax.swing.JButton" binding="btnrefresh">
+                <constraints/>
+                <properties>
+                  <maximumSize width="56" height="40"/>
+                  <minimumSize width="56" height="40"/>
+                  <preferredSize width="56" height="40"/>
+                  <text value="刷新"/>
+                </properties>
+              </component>
+              <component id="42627" class="javax.swing.JButton" binding="btnAddClinicRegister" default-binding="true">
+                <constraints/>
+                <properties>
+                  <minimumSize width="82" height="40"/>
+                  <preferredSize width="82" height="40"/>
+                  <text value="临时挂号"/>
+                </properties>
+              </component>
+            </children>
           </grid>
         </children>
       </grid>

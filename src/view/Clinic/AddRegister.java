@@ -53,7 +53,6 @@ public class AddRegister {
         panel.setBorder(new EmptyBorder(10, 10, 10, 10));
         ViewUtils.changeFont(panel);
         progressBar1.setVisible(false);
-
     }
 
     public void renewDoctorCombox(){

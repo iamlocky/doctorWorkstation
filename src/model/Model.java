@@ -408,6 +408,55 @@ public class Model<E> {
     }
 
     /**
+     * @param apiUrl_Put       put的url
+     * @param jsonData         要修改的json数据/string
+     * @param responseListener 返回 List<T> 数据
+     */
+    public void putData(String apiUrl_Put, Object jsonData, final @NotNull OnStringResponseListener responseListener) {
+        client = new OkHttpClient.Builder().connectTimeout(connectTimeout, TimeUnit.SECONDS)
+                .readTimeout(readOrWriteTimeout, TimeUnit.SECONDS)
+                .writeTimeout(readOrWriteTimeout, TimeUnit.SECONDS).build();
+
+        requestBuilder = new Request.Builder().url(apiUrl_Put);
+
+        requestBuilder.addHeader("X-Bmob-Application-Id", Akey.appId);
+        requestBuilder.addHeader("X-Bmob-REST-API-Key", Akey.restId);
+        requestBody = RequestBody.create(JSON, gson.toJson(jsonData));
+        request = requestBuilder.put(requestBody).build();
+        if (call != null) {
+            call.cancel();
+        }
+        call = client.newCall(request);
+        call.enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                finishOnMainThread(responseListener, null, e);
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+
+                try {
+                    responseString = response.body().string();
+                    log(responseString);
+
+                    if (checkResponseIsNull(responseString)) {
+                        finishOnMainThread(responseListener, null, new Exception(nullExceptionTag));
+                        return;
+                    }
+
+                    finishOnMainThread(responseListener, responseString, null);
+
+                } catch (Exception e) {
+                    finishOnMainThread(responseListener, null, e);
+                    e.printStackTrace();
+                }
+
+            }
+        });
+    }
+
+    /**
      * @param apiUrl_Del
      * @param id               要删除的id
      * @param responseListener

@@ -9,6 +9,7 @@ import model.bean.*;
 
 import java.lang.reflect.Type;
 import java.util.HashMap;
+import java.util.List;
 
 public class DoctorController extends Controller{
     Gson gson = Model.getGson();
@@ -79,6 +80,8 @@ public class DoctorController extends Controller{
             }
         });
     }
+
+
 
     public void newMedicalCase(MedicalCase medicalCase,SimpleListener simpleListener) {
         Model model = new Model();

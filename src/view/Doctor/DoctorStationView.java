@@ -7,6 +7,7 @@ import controller.SimpleListener;
 import model.bean.ClinicRegisterBean;
 import model.bean.ErrInfo;
 import model.bean.ResultBean;
+import view.Clinic.ClinicStationView;
 import view.ItemView;
 import Utils.ViewUtils;
 
@@ -17,6 +18,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowFocusListener;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -28,6 +30,9 @@ public class DoctorStationView {
     private JPanel panel1;
     private JButton btnrefresh;
     private JProgressBar progressBar1;
+    private JButton btnAddClinicRegister;
+    private JLabel lbtime;
+    private JLabel lbqueue;
     JPanel panelContent1;
     private Controller controller;
     private DoctorController doctorController;
@@ -35,12 +40,13 @@ public class DoctorStationView {
     private JScrollPane scrollPane;
     private JTabbedPane tabbedPane;
     private JPanel panelContent2;
+    private Timer timer;
 
     public static void main(String[] args) {
-        if (frame!=null){
+        if (frame != null) {
             frame.dispose();
         }
-        frame = new JFrame("医生工作站---当前工作人员: " + Controller.getUser().getName() +" "+ Controller.getUser().getUsername());
+        frame = new JFrame("医生工作站---当前工作人员: " + Controller.getUser().getName() + " " + Controller.getUser().getUsername());
         frame.setContentPane(new DoctorStationView().panel1);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.pack();
@@ -49,19 +55,26 @@ public class DoctorStationView {
     }
 
 
-    public void initView(){
-        panelContent1 =new JPanel();
-        panelContent1.setPreferredSize(new Dimension(400,400));
-        panelContent2 =new JPanel();
-        panelContent2.setPreferredSize(new Dimension(400,400));
-        tabbedPane=new JTabbedPane();
-        tabbedPane.setPreferredSize(new Dimension(400,400));
+    public void initView() {
+        timer = new Timer(1000, new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                lbtime.setText(new Date().toString());
+            }
+        });
+        timer.start();
+        panelContent1 = new JPanel();
+        panelContent1.setPreferredSize(new Dimension(400, 400));
+        panelContent2 = new JPanel();
+        panelContent2.setPreferredSize(new Dimension(400, 400));
+        tabbedPane = new JTabbedPane();
+        tabbedPane.setPreferredSize(new Dimension(400, 400));
         tabbedPane.addTab("未就诊", panelContent1);
         tabbedPane.addTab("已就诊", panelContent2);
-        scrollPane=new JScrollPane(tabbedPane);
-        scrollPane.setBorder(new LineBorder(new Color(0,0,0),1,true));
+        scrollPane = new JScrollPane(tabbedPane);
+        scrollPane.setBorder(new LineBorder(new Color(0, 0, 0), 1, true));
 
-        panel1.add(scrollPane,BorderLayout.CENTER);
+        panel1.add(scrollPane, BorderLayout.CENTER);
 
         frame.addWindowFocusListener(new WindowFocusListener() {
             @Override
@@ -73,12 +86,13 @@ public class DoctorStationView {
             public void windowLostFocus(WindowEvent e) {
 
             }
-        });}
+        });
+    }
 
     public DoctorStationView() {
         initView();
 
-        controller=new Controller(new IControllerListener() {
+        controller = new Controller(new IControllerListener() {
             @Override
             public void done(Object data) {
 
@@ -96,16 +110,20 @@ public class DoctorStationView {
         }, null);
 
 
-        doctorController=new DoctorController();
+        doctorController = new DoctorController();
 
         renewRegisters();
 
 
-
-
+        btnAddClinicRegister.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                ClinicStationView.main("false");
+            }
+        });
     }
 
-    public void renewRegisters(){
+    public void renewRegisters() {
         progressBar1.setVisible(true);
         doctorController.getRegister(new SimpleListener<ResultBean<ClinicRegisterBean>>() {
             @Override
@@ -113,20 +131,28 @@ public class DoctorStationView {
                 panelContent1.removeAll();
                 panelContent2.removeAll();
                 progressBar1.setVisible(false);
-
-                registerBeanList=data.getResults();
-                if (registerBeanList!=null){
-                    for (int i = 0; i <registerBeanList.size() ; i++) {
-                        ClinicRegisterBean clinicRegisterBean=registerBeanList.get(i);
-                        ItemView itemView=new ItemView(clinicRegisterBean);
-                        if (clinicRegisterBean.getHasVisited()==0) {
-                            panelContent1.add(itemView.panel1);
-                        }else {
-                            panelContent2.add(itemView.panel1);
+                if (data == null || data.getResults() == null) {
+                    return;
+                }
+                try {
+                    registerBeanList = data.getResults();
+                    if (registerBeanList != null) {
+                        for (int i = 0; i < registerBeanList.size(); i++) {
+                            ClinicRegisterBean clinicRegisterBean = registerBeanList.get(i);
+                            ItemView itemView = new ItemView(clinicRegisterBean);
+                            if (clinicRegisterBean.getHasVisited() == 0) {
+                                panelContent1.add(itemView.panel1);
+                            } else {
+                                panelContent2.add(itemView.panel1);
+                            }
                         }
-                    }
-                    scrollPane.setViewportView(tabbedPane);
+                        scrollPane.setViewportView(tabbedPane);
 
+                    }
+                    lbqueue.setText("今日已挂号" + registerBeanList.size() + "人，剩余可挂号数" + (10 - registerBeanList.size())+"");
+
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
 
             }
@@ -151,7 +177,8 @@ public class DoctorStationView {
             }
         });
     }
-    public void print(Object o){
+
+    public void print(Object o) {
         System.out.println(o);
     }
 

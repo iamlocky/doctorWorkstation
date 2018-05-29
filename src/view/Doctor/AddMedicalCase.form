@@ -16,6 +16,7 @@
           <horizontalAlignment value="10"/>
           <preferredSize width="32" height="50"/>
           <text value="接诊界面"/>
+          <verticalAlignment value="1"/>
         </properties>
       </component>
       <grid id="d1214" binding="panelLeft" layout-manager="BorderLayout" hgap="0" vgap="0">
@@ -62,7 +63,7 @@
                 <constraints/>
                 <properties>
                   <preferredSize width="82" height="40"/>
-                  <text value="结束接诊"/>
+                  <text value="完成接诊"/>
                 </properties>
               </component>
               <component id="c02d4" class="javax.swing.JButton" binding="btn3">

@@ -15,7 +15,7 @@
           <font size="18"/>
           <horizontalAlignment value="0"/>
           <preferredSize width="36" height="30"/>
-          <text value="查找"/>
+          <text value="查找药品"/>
         </properties>
       </component>
       <component id="b0e5" class="javax.swing.JButton" binding="btnOK">

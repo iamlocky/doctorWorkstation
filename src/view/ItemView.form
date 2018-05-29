@@ -122,6 +122,14 @@
               </component>
             </children>
           </grid>
+          <component id="98dea" class="javax.swing.JProgressBar" binding="progressBar1" default-binding="true">
+            <constraints border-constraint="East"/>
+            <properties>
+              <indeterminate value="true"/>
+              <orientation value="1"/>
+              <preferredSize width="10" height="146"/>
+            </properties>
+          </component>
         </children>
       </grid>
     </children>

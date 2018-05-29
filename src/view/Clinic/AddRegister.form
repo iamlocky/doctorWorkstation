@@ -89,6 +89,7 @@
                 <properties>
                   <editable value="false"/>
                   <preferredSize width="200" height="26"/>
+                  <toolTipText value="选择病人后自动填充"/>
                 </properties>
               </component>
             </children>

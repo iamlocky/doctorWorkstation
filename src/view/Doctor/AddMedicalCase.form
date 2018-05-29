@@ -12,7 +12,7 @@
       <component id="54159" class="javax.swing.JLabel">
         <constraints border-constraint="North"/>
         <properties>
-          <font size="20"/>
+          <font size="20" style="1"/>
           <horizontalAlignment value="10"/>
           <preferredSize width="32" height="50"/>
           <text value="接诊界面"/>

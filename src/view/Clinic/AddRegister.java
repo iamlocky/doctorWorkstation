@@ -7,7 +7,7 @@ import controller.IControllerListener;
 import controller.SimpleListener;
 import model.Model;
 import model.bean.*;
-import view.ViewUtils;
+import Utils.ViewUtils;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;

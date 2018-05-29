@@ -6,7 +6,7 @@ import controller.SimpleListener;
 import model.bean.ErrInfo;
 import model.bean.PatientInfo;
 import model.bean.SucceedInfo;
-import view.ViewUtils;
+import Utils.ViewUtils;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;

@@ -5,10 +5,9 @@ import controller.Controller;
 import controller.IControllerListener;
 import controller.SimpleListener;
 import model.bean.DrugBean;
-import model.bean.MedicalCase;
 import model.bean.PatientInfoBean;
 import model.bean.ResultBean;
-import view.ViewUtils;
+import Utils.ViewUtils;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;

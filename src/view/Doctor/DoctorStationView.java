@@ -8,7 +8,7 @@ import model.bean.ClinicRegisterBean;
 import model.bean.ErrInfo;
 import model.bean.ResultBean;
 import view.ItemView;
-import view.ViewUtils;
+import Utils.ViewUtils;
 
 import javax.swing.*;
 import javax.swing.border.LineBorder;

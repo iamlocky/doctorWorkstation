@@ -1,5 +1,6 @@
 package view;
 
+import Utils.ViewUtils;
 import com.google.gson.Gson;
 import controller.Controller;
 import controller.IControllerListener;
@@ -7,7 +8,6 @@ import model.Model;
 import Utils.StringUtil;
 import model.bean.DoctorBean;
 import model.bean.ErrInfo;
-import model.bean.User;
 import view.Doctor.DoctorStationView;
 import view.Clinic.ClinicStationView;
 

@@ -2,15 +2,12 @@ package view.Clinic;
 
 import Utils.FormatUtil;
 import Utils.StringUtil;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import controller.ClinicController;
 import controller.Controller;
 import controller.IControllerListener;
 import controller.SimpleListener;
-import model.Model;
 import model.bean.*;
-import view.ViewUtils;
+import Utils.ViewUtils;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;

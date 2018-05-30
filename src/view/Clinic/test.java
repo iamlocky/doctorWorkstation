@@ -3,6 +3,7 @@ package view.Clinic;
 import Utils.FormatUtil;
 import com.google.gson.Gson;
 import controller.Controller;
+import controller.DoctorController;
 import model.ApiUrl;
 import model.Model;
 import model.OnStringResponseListener;
@@ -38,7 +39,8 @@ public class test {
 //        callPrinter(Controller.getToday());
 //        int i= JOptionPane.showConfirmDialog(null,"该患者当天已挂号，确认继续挂号？");
 //        print(i);
-            print(URLDecoder.decode("%7B%22doctorID%22:%22RUnc999A%22%7D"));
+//            print(URLDecoder.decode("%7B%22doctorID%22:%22RUnc999A%22%7D"));
+//        DoctorController.openSql();
     }
 
 

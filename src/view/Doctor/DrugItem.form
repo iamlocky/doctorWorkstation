@@ -13,10 +13,11 @@
       <grid id="e6b99" layout-manager="FlowLayout" hgap="5" vgap="5" flow-align="3">
         <constraints border-constraint="North"/>
         <properties>
+          <background color="-16223786"/>
           <minimumSize width="520" height="85"/>
           <preferredSize width="520" height="85"/>
         </properties>
-        <border type="line"/>
+        <border type="none"/>
         <children>
           <component id="f547b" class="javax.swing.JLabel" binding="lbname">
             <constraints/>
@@ -37,6 +38,7 @@
           <grid id="de7a8" layout-manager="FlowLayout" hgap="5" vgap="5" flow-align="1">
             <constraints/>
             <properties>
+              <background color="-16223786"/>
               <maximumSize width="114" height="69"/>
               <minimumSize width="114" height="69"/>
             </properties>
@@ -75,6 +77,15 @@
               <minimumSize width="56" height="40"/>
               <preferredSize width="56" height="40"/>
               <text value="删除"/>
+            </properties>
+          </component>
+          <component id="8a7" class="javax.swing.JLabel" binding="lbprice">
+            <constraints/>
+            <properties>
+              <maximumSize width="60" height="18"/>
+              <minimumSize width="60" height="18"/>
+              <preferredSize width="60" height="18"/>
+              <text value="价格"/>
             </properties>
           </component>
         </children>

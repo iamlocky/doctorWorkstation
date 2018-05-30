@@ -16,6 +16,7 @@ public class DrugItem extends JComponent{
     private JLabel lbcount;
     private JLabel lbname;
     private JLabel lbnum;
+    private JLabel lbprice;
     public DrugBean drugBean;
     public Integer count=1;
     public Integer index;
@@ -56,6 +57,7 @@ public class DrugItem extends JComponent{
             lbname.setToolTipText(drugBean.getName());
             lbnum.setText(drugBean.getSpecification());
             lbnum.setToolTipText(drugBean.getSpecification());
+            lbprice.setText(String.format("%.2f",drugBean.getTotalPrice())+"元");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -63,7 +65,7 @@ public class DrugItem extends JComponent{
         btnDel.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                parent.remove(panel1);
+                parent.remove(panel1,drugBean);
 
             }
         });
@@ -74,6 +76,7 @@ public class DrugItem extends JComponent{
                 if (count>1){
                     drugBean.setCount(--count);
                     lbcount.setText(count.toString());
+                    lbprice.setText(String.format("%.2f",drugBean.getTotalPrice())+"元");
                 }else {
                     if (ViewUtils.currentFrame!=null) {
                         new Toast(ViewUtils.currentFrame,"数量最小为1",1500,Toast.error).start();
@@ -86,6 +89,7 @@ public class DrugItem extends JComponent{
             public void actionPerformed(ActionEvent e) {
                 drugBean.setCount(++count);
                 lbcount.setText(count.toString());
+                lbprice.setText(String.format("%.2f",drugBean.getTotalPrice())+"元");
             }
         });
     }

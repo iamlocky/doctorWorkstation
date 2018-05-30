@@ -46,15 +46,8 @@
                   <component id="b7a3e" class="javax.swing.JTextField" binding="tfName">
                     <constraints/>
                     <properties>
-                      <preferredSize width="130" height="35"/>
+                      <preferredSize width="140" height="40"/>
                       <toolTipText value=""/>
-                    </properties>
-                  </component>
-                  <component id="e714f" class="javax.swing.JButton" binding="btnFind" default-binding="true">
-                    <constraints/>
-                    <properties>
-                      <preferredSize width="80" height="40"/>
-                      <text value="查找"/>
                     </properties>
                   </component>
                   <component id="40657" class="javax.swing.JProgressBar" binding="progressBar1" default-binding="true">

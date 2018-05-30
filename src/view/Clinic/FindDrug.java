@@ -3,6 +3,7 @@ package view.Clinic;
 import Utils.StringUtil;
 import com.google.gson.reflect.TypeToken;
 import controller.Controller;
+import controller.DoctorController;
 import controller.IControllerListener;
 import controller.SimpleListener;
 import model.bean.DrugBean;
@@ -52,8 +53,8 @@ public class FindDrug {
         ViewUtils.changeFont(panel1);
         table = new JTable();
         panelmain.add(new JScrollPane(table), BorderLayout.CENTER);
-
-//        panelmain.add(table);
+        initContrller();
+        initTableModelInfo();
     }
 
     public void setSimpleListener(SimpleListener simpleListener) {
@@ -86,8 +87,9 @@ public class FindDrug {
     }
 
     public void initTableModelInfo() {
+        dataInfo = DoctorController.getDrugDatabase();
         lbcount.setText(dataInfo.size() + "条数据");
-        String[] columnNames = {"药品名", "剂量", "类型", "编号", "药厂","仓库编号"};
+        String[] columnNames = {"药品名", "剂量", "规格", "批准文号", "生产企业", "仓库编号", "价格"};
         Object[][] obj = new Object[dataInfo.size()][columnNames.length];
         for (int i = 0; i < dataInfo.size(); i++) {
             DrugBean drugBean = dataInfo.get(i);
@@ -110,6 +112,9 @@ public class FindDrug {
                         break;
                     case 5:
                         obj[i][j] = drugBean.getObjectId();
+                        break;
+                    case 6:
+                        obj[i][j] = drugBean.getPrice();
                         break;
                 }
             }
@@ -153,11 +158,11 @@ public class FindDrug {
     public FindDrug(LinkedHashMap<String, String> data, SimpleListener simpleListener) {
         this.simpleListener = simpleListener;
         this.data = data;
-        initContrller();
+//        initContrller();
         initView();
 //        if (data != null) {
 //        }
-        controller.findDrug(null);
+//        controller.findDrug(null);
         tfName.getDocument().addDocumentListener(new DocumentListener() {
             @Override
             public void insertUpdate(DocumentEvent e) {
@@ -182,17 +187,17 @@ public class FindDrug {
             public void keyPressed(KeyEvent e) {
                 super.keyPressed(e);
                 if (e.getKeyChar() == KeyEvent.VK_ENTER) {
-                    btnFind.doClick();
+                    renewFindFilter();
                 }
             }
         });
-        btnFind.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                controller.findDrug(renewNameData(tfName.getText().trim()));
-
-            }
-        });
+//        btnFind.addActionListener(new ActionListener() {
+//            @Override
+//            public void actionPerformed(ActionEvent e) {
+////                controller.findDrug(renewNameData(tfName.getText().trim()));
+//
+//            }
+//        });
 
         table.addMouseListener(new MouseAdapter() {
             @Override
@@ -212,9 +217,9 @@ public class FindDrug {
         });
     }
 
-    void done(){
+    void done() {
         index = table.getSelectedRow();
-        if (index==-1){
+        if (index == -1) {
             return;
         }
         currentObjectID = (String) table.getValueAt(index, 5);
@@ -242,6 +247,6 @@ public class FindDrug {
     private JLabel lb;
     private JTextField tfName;
     private JProgressBar progressBar1;
-    private JButton btnFind;
+    //    private JButton btnFind;
     private JLabel lbcount;
 }

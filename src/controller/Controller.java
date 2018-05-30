@@ -359,10 +359,8 @@ public class Controller<T> {
 
     public DrugBean findLocalDrug(String objectId){
         if (drugBeanListMap != null && !StringUtil.isEmpty(objectId)) {
-//            print("do find " + objectId);
             return drugBeanListMap.get(objectId);
         } else {
-//            print("do not find ");
             return null;
         }
     }

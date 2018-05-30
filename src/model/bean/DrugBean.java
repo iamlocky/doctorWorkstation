@@ -21,8 +21,8 @@ public class DrugBean {
     private String form;
     private String name;
     private String num;
-    private Integer count=1;
-    private Double price=0.0;
+    private Integer count = 1;
+    private Double price = 0.0;
     private String objectId;
     private String specification;
     private String updatedAt;
@@ -111,6 +111,10 @@ public class DrugBean {
         return price;
     }
 
+    public Double getTotalPrice() {
+        return price * count;
+    }
+
     public void setPrice(Double price) {
         this.price = price;
     }
@@ -121,5 +125,37 @@ public class DrugBean {
 
     public void setUpdatedAt(String updatedAt) {
         this.updatedAt = updatedAt;
+    }
+
+    @Override
+    public int hashCode() {
+        return name.hashCode() + num.hashCode();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof DrugBean) {
+
+            return hashCode() == ((DrugBean) obj).hashCode();
+        } else
+            return super.equals(obj);
+    }
+
+    @Override
+    public String toString() {
+        return "DrugBean{" +
+                "address='" + address + '\'' +
+                ", classify='" + classify + '\'' +
+                ", createdAt='" + createdAt + '\'' +
+                ", date='" + date + '\'' +
+                ", form='" + form + '\'' +
+                ", name='" + name + '\'' +
+                ", num='" + num + '\'' +
+                ", count=" + count +
+                ", price=" + price +
+                ", objectId='" + objectId + '\'' +
+                ", specification='" + specification + '\'' +
+                ", updatedAt='" + updatedAt + '\'' +
+                '}';
     }
 }

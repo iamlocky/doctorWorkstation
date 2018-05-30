@@ -1,6 +1,8 @@
 package view.Doctor;
 
 import Utils.LoggerUtil;
+import Utils.Toast;
+import Utils.ViewUtils;
 import controller.SimpleListener;
 import model.bean.DrugBean;
 import model.bean.ErrInfo;
@@ -13,6 +15,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
+import java.util.HashSet;
+import java.util.Set;
 
 public class PrescriptionView {
     public JPanel panelPrescription;
@@ -24,6 +28,7 @@ public class PrescriptionView {
     private JPanel panel3;
     public CustomJPanel panelDrugs;
     private FindDrug findDrug;
+    private Set<DrugBean> drugBeans=new HashSet<>();
 
     public PrescriptionView() {
         panelPrescription.addFocusListener(new FocusAdapter() {
@@ -65,7 +70,15 @@ public class PrescriptionView {
     }
 
     public void addDrug2Panel(DrugBean drugBean){
-        panelDrugs.add(new DrugItem(drugBean, panelDrugs).panel1);
+        if (drugBeans.add(drugBean)) {
+            panelDrugs.add(new DrugItem(drugBean, panelDrugs).panel1);
+        }else {
+            SwingUtilities.invokeLater(()->{
+                if (ViewUtils.currentFrame!=null) {
+                    new Toast(ViewUtils.currentFrame,"已添加了该药品",1500,Toast.error).start();
+                }
+            });
+        }
     }
 
     public JTextArea addTextAera(JPanel panel) {
@@ -88,9 +101,12 @@ public class PrescriptionView {
                 return super.add(component);
             }
 
-            @Override
-            public void remove(Component component) {
+
+            public void remove(Component component,DrugBean drugBean) {
                 super.remove(component);
+                if (drugBeans!=null){
+                    drugBeans.remove(drugBean);
+                }
                 setPreferredSize(new Dimension(400, (80 + 11) * getComponentCount() + 5));
                 validate();
                 SwingUtilities.invokeLater(()->{
@@ -114,7 +130,7 @@ public class PrescriptionView {
             super(layout);
         }
 
-        public void remove(Component component) {
+        public void remove(Component component,DrugBean drugBean) {
             if (getComponentCount() <= 1) {
                 LoggerUtil.log("removeAll");
                 super.removeAll();

@@ -9,7 +9,9 @@ import model.bean.*;
 
 import java.lang.reflect.Type;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 public class DoctorController extends Controller{
     Gson gson = Model.getGson();
@@ -52,7 +54,7 @@ public class DoctorController extends Controller{
         Model model = new Model();
         type= new TypeToken<ResultBean<ClinicRegisterBean>>() {
         }.getType();
-        HashMap<String,String> map=new HashMap<>();
+        LinkedHashMap<String,String> map=new LinkedHashMap<>();
         map.put("doctorID",Controller.getUser().getObjectId());
         model.getData(ApiUrl.Post.REGISTER_Info+Controller.getToday(),map, new OnStringResponseListener() {
             @Override

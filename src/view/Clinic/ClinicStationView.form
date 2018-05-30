@@ -18,14 +18,14 @@
     </properties>
     <border type="none"/>
     <children>
-      <component id="bbf2" class="javax.swing.JLabel">
+      <component id="bbf2" class="javax.swing.JLabel" binding="lbtitle">
         <constraints>
           <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
           <forms/>
         </constraints>
         <properties>
-          <font size="20"/>
-          <horizontalAlignment value="0"/>
+          <font size="20" style="1"/>
+          <horizontalAlignment value="10"/>
           <preferredSize width="32" height="50"/>
           <text value="挂号台"/>
         </properties>

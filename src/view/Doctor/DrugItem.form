@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<form xmlns="http://www.intellij.com/uidesigner/form/" version="1" bind-to-class="view.Doctor.DrugItem">
+  <grid id="27dc6" binding="panel1" default-binding="true" layout-manager="BorderLayout" hgap="0" vgap="0">
+    <constraints>
+      <xy x="20" y="20" width="520" height="400"/>
+    </constraints>
+    <properties>
+      <minimumSize width="520" height="85"/>
+      <preferredSize width="520" height="85"/>
+    </properties>
+    <border type="none"/>
+    <children>
+      <grid id="e6b99" layout-manager="FlowLayout" hgap="5" vgap="5" flow-align="3">
+        <constraints border-constraint="North"/>
+        <properties>
+          <minimumSize width="520" height="85"/>
+          <preferredSize width="520" height="85"/>
+        </properties>
+        <border type="line"/>
+        <children>
+          <component id="f547b" class="javax.swing.JLabel" binding="lbname">
+            <constraints/>
+            <properties>
+              <minimumSize width="26" height="18"/>
+              <preferredSize width="110" height="18"/>
+              <text value="药品"/>
+            </properties>
+          </component>
+          <component id="a1a5e" class="javax.swing.JLabel" binding="lbnum">
+            <constraints/>
+            <properties>
+              <minimumSize width="26" height="18"/>
+              <preferredSize width="110" height="18"/>
+              <text value="剂量"/>
+            </properties>
+          </component>
+          <grid id="de7a8" layout-manager="FlowLayout" hgap="5" vgap="5" flow-align="1">
+            <constraints/>
+            <properties>
+              <maximumSize width="114" height="69"/>
+              <minimumSize width="114" height="69"/>
+            </properties>
+            <border type="none" title="数量"/>
+            <children>
+              <component id="33e37" class="javax.swing.JButton" binding="btnSub">
+                <constraints/>
+                <properties>
+                  <maximumSize width="40" height="40"/>
+                  <minimumSize width="40" height="40"/>
+                  <preferredSize width="40" height="40"/>
+                  <text value="-"/>
+                </properties>
+              </component>
+              <component id="7caf0" class="javax.swing.JLabel" binding="lbcount">
+                <constraints/>
+                <properties>
+                  <text value="1"/>
+                </properties>
+              </component>
+              <component id="81228" class="javax.swing.JButton" binding="btnAdd">
+                <constraints/>
+                <properties>
+                  <maximumSize width="40" height="40"/>
+                  <minimumSize width="40" height="40"/>
+                  <preferredSize width="40" height="40"/>
+                  <text value="+"/>
+                </properties>
+              </component>
+            </children>
+          </grid>
+          <component id="4496" class="javax.swing.JButton" binding="btnDel" default-binding="true">
+            <constraints/>
+            <properties>
+              <maximumSize width="56" height="40"/>
+              <minimumSize width="56" height="40"/>
+              <preferredSize width="56" height="40"/>
+              <text value="删除"/>
+            </properties>
+          </component>
+        </children>
+      </grid>
+    </children>
+  </grid>
+</form>

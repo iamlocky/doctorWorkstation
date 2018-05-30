@@ -37,6 +37,7 @@ public class ClinicStationView {
     private JButton btnRefresh;
     private JProgressBar progressBar1;
     private JButton btnClear;
+    private JLabel lbtitle;
     private ClinicController clinicController;
     private Controller controller;
     private JTable table;
@@ -119,7 +120,7 @@ public class ClinicStationView {
             table.clearSelection();
             table.setModel(tableModel);
             sorter = new TableRowSorter<TableModel>(tableModel);
-            List<RowSorter.SortKey> sortKeys = new ArrayList<RowSorter.SortKey>();
+            List<RowSorter.SortKey> sortKeys = new ArrayList<>();
             sortKeys.add(new RowSorter.SortKey(5, SortOrder.DESCENDING));
             sorter.setSortKeys(sortKeys);
             table.setRowSorter(sorter);
@@ -133,8 +134,9 @@ public class ClinicStationView {
     }
 
     public void initView() {
+        lbtitle.setBorder(new EmptyBorder(0,10,0,0));
         panel1.setBorder(new EmptyBorder(10, 10, 10, 10));
-        ViewUtils.changeFont(panel1);
+//        ViewUtils.changeFont(panel1);
         progressBar1.setVisible(false);
 
         controller = new Controller(new IControllerListener<ResultBean<DoctorBean>>() {

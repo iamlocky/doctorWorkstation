@@ -10,6 +10,7 @@ import model.bean.ClinicRegister;
 
 import javax.swing.*;
 import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -35,9 +36,9 @@ public class test {
 //        String date=simpleDateFormat.format(new Date());
 //        callPrinter(date);
 //        callPrinter(Controller.getToday());
-        int i= JOptionPane.showConfirmDialog(null,"该患者当天已挂号，确认继续挂号？");
-        print(i);
-
+//        int i= JOptionPane.showConfirmDialog(null,"该患者当天已挂号，确认继续挂号？");
+//        print(i);
+            print(URLDecoder.decode("%7B%22doctorID%22:%22RUnc999A%22%7D"));
     }
 
 

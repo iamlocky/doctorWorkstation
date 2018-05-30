@@ -1,5 +1,6 @@
 package view.Clinic;
 
+import Utils.StringUtil;
 import com.google.gson.reflect.TypeToken;
 import controller.Controller;
 import controller.IControllerListener;
@@ -11,10 +12,15 @@ import Utils.ViewUtils;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
+import javax.swing.table.TableRowSorter;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -22,17 +28,20 @@ import java.util.Map;
  * 查找界面
  */
 
-public class FindDrug{
+public class FindDrug {
     private static JFrame frame;
     private static String title;
     private JPanel panel1;
     private JButton btnOK;
-    private Map<String, String> data = new HashMap<>();
+    private LinkedHashMap<String, String> data = new LinkedHashMap<>();
     private List<DrugBean> dataInfo;
     private SimpleListener simpleListener;
     private Controller controller;
+    private TableRowSorter<TableModel> sorter;
 
     private JTable table;
+    private int index;
+    private String currentObjectID;
 
 
     public void initView() {
@@ -58,7 +67,7 @@ public class FindDrug{
                 dataInfo = data.getResults();
                 initTableModelInfo();
                 progressBar1.setVisible(false);
-                table.setRowSelectionInterval(0,0);
+                table.setRowSelectionInterval(0, 0);
             }
 
             @Override
@@ -77,12 +86,12 @@ public class FindDrug{
     }
 
     public void initTableModelInfo() {
-
-        String[] columnNames = {"药品名", "剂量", "类型", "编号","药厂"};
-        Object[][] obj = new Object[dataInfo.size()][4];
+        lbcount.setText(dataInfo.size() + "条数据");
+        String[] columnNames = {"药品名", "剂量", "类型", "编号", "药厂","仓库编号"};
+        Object[][] obj = new Object[dataInfo.size()][columnNames.length];
         for (int i = 0; i < dataInfo.size(); i++) {
             DrugBean drugBean = dataInfo.get(i);
-            for (int j = 0; j <5; j++) {
+            for (int j = 0; j < columnNames.length; j++) {
                 switch (j) {
                     case 0:
                         obj[i][j] = drugBean.getName();
@@ -99,6 +108,9 @@ public class FindDrug{
                     case 4:
                         obj[i][j] = drugBean.getAddress();
                         break;
+                    case 5:
+                        obj[i][j] = drugBean.getObjectId();
+                        break;
                 }
             }
         }
@@ -109,13 +121,27 @@ public class FindDrug{
             }
         };
         table.setModel(tableModel);
+        sorter = new TableRowSorter<TableModel>(tableModel);
+        table.setRowSorter(sorter);
     }
 
-    public Map<String, String> renewNameData(String s) {
+    public void renewFindFilter() {
+        if (!StringUtil.isEmpty(tfName.getText())) {
+            if (sorter != null) {
+                sorter.setRowFilter(RowFilter.regexFilter(tfName.getText()));
+            }
+        } else {
+            if (sorter != null) {
+                sorter.setRowFilter(null);
+            }
+        }
+    }
+
+    public LinkedHashMap<String, String> renewNameData(String s) {
         progressBar1.setVisible(true);
 
         if (data == null) {
-            data = new HashMap<>();
+            data = new LinkedHashMap<>();
         } else {
             data.clear();
         }
@@ -124,20 +150,38 @@ public class FindDrug{
         return data;
     }
 
-    public FindDrug(Map<String, String> data) {
+    public FindDrug(LinkedHashMap<String, String> data, SimpleListener simpleListener) {
+        this.simpleListener = simpleListener;
         this.data = data;
         initContrller();
         initView();
-        if (data != null) {
-            controller.findPatient(data);
-        }
+//        if (data != null) {
+//        }
+        controller.findDrug(null);
+        tfName.getDocument().addDocumentListener(new DocumentListener() {
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                renewFindFilter();
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                renewFindFilter();
+
+            }
+
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                renewFindFilter();
+
+            }
+        });
 
         tfName.addKeyListener(new KeyAdapter() {
             @Override
             public void keyPressed(KeyEvent e) {
                 super.keyPressed(e);
-                if(e.getKeyChar()==KeyEvent.VK_ENTER )
-                {
+                if (e.getKeyChar() == KeyEvent.VK_ENTER) {
                     btnFind.doClick();
                 }
             }
@@ -145,7 +189,7 @@ public class FindDrug{
         btnFind.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                controller.findPatient(renewNameData(tfName.getText().trim()));
+                controller.findDrug(renewNameData(tfName.getText().trim()));
 
             }
         });
@@ -155,9 +199,7 @@ public class FindDrug{
             public void mouseClicked(MouseEvent e) {
                 super.mouseClicked(e);
                 if (e.getClickCount() == 2) {
-                    int row = ((JTable) e.getSource()).rowAtPoint(e.getPoint()); //获得行位置
-                    simpleListener.done(dataInfo.get(row));
-                    frame.dispose();
+                    done();
                 }
             }
         });
@@ -165,21 +207,28 @@ public class FindDrug{
         btnOK.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                simpleListener.done(dataInfo.get(table.getSelectedRow()));
-                frame.dispose();
-
+                done();
             }
         });
-
     }
 
-    public static FindDrug main(Map<String, String> data) {
-        title ="查找药品";
-        if (frame!=null){
+    void done(){
+        index = table.getSelectedRow();
+        if (index==-1){
+            return;
+        }
+        currentObjectID = (String) table.getValueAt(index, 5);
+        simpleListener.done(controller.findLocalDrug(currentObjectID));
+        frame.dispose();
+    }
+
+    public static FindDrug main(LinkedHashMap<String, String> data, SimpleListener simpleListener) {
+        title = "查找药品";
+        if (frame != null) {
             frame.dispose();
         }
         frame = new JFrame(title);
-        findDrug = new FindDrug(data);
+        findDrug = new FindDrug(data, simpleListener);
         frame.setContentPane(findDrug.panel1);
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         frame.pack();
@@ -187,10 +236,12 @@ public class FindDrug{
         ViewUtils.toCenter(frame);
         return findDrug;
     }
+
     private static FindDrug findDrug;
     private JPanel panelmain;
     private JLabel lb;
     private JTextField tfName;
     private JProgressBar progressBar1;
     private JButton btnFind;
+    private JLabel lbcount;
 }

@@ -15,23 +15,15 @@
         <properties/>
         <border type="none"/>
         <children>
-          <component id="714d8" class="javax.swing.JLabel">
+          <component id="714d8" class="javax.swing.JLabel" binding="lbtitle">
             <constraints border-constraint="Center"/>
             <properties>
-              <font size="20"/>
-              <horizontalAlignment value="0"/>
-              <preferredSize width="32" height="40"/>
+              <font size="20" style="1"/>
+              <horizontalAlignment value="10"/>
+              <preferredSize width="32" height="50"/>
               <text value="医生工作站"/>
             </properties>
           </component>
-          <grid id="51064" layout-manager="BorderLayout" hgap="0" vgap="0">
-            <constraints border-constraint="West"/>
-            <properties>
-              <preferredSize width="56" height="0"/>
-            </properties>
-            <border type="none"/>
-            <children/>
-          </grid>
         </children>
       </grid>
       <grid id="d3e9d" layout-manager="BorderLayout" hgap="0" vgap="0">

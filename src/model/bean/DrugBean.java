@@ -21,6 +21,8 @@ public class DrugBean {
     private String form;
     private String name;
     private String num;
+    private Integer count=1;
+    private Double price=0.0;
     private String objectId;
     private String specification;
     private String updatedAt;
@@ -95,6 +97,22 @@ public class DrugBean {
 
     public void setSpecification(String specification) {
         this.specification = specification;
+    }
+
+    public Integer getCount() {
+        return count;
+    }
+
+    public void setCount(Integer count) {
+        this.count = count;
+    }
+
+    public Double getPrice() {
+        return price;
+    }
+
+    public void setPrice(Double price) {
+        this.price = price;
     }
 
     public String getUpdatedAt() {

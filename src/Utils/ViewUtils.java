@@ -7,6 +7,7 @@ import java.awt.*;
  */
 public class ViewUtils {
     private static Font font = new Font("微软雅黑", Font.PLAIN, 12);
+    public static JFrame currentFrame;
 
     public static void changeFont(JComponent jComponent) {
         int count = jComponent.getComponentCount();
@@ -31,7 +32,8 @@ public class ViewUtils {
         }
     }
 
-    public static void toCenter(Frame frame){
+    public static void toCenter(JFrame frame){
+        currentFrame=frame;
         int windowWidth = frame.getWidth(); //获得窗口宽
         int windowHeight = frame.getHeight(); //获得窗口高
         Toolkit kit = Toolkit.getDefaultToolkit(); //定义工具包

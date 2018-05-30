@@ -89,7 +89,7 @@ public class ClinicController {
         getQueueNumber(clinicRegister, new SimpleListener<Integer>() {
             @Override
             public void done(Integer data) {
-                if (data>=10){
+                if (data>10){
                     simpleListener.fail("该医生已满号，请更换医生");
                     return;
                 }
@@ -230,7 +230,7 @@ public class ClinicController {
         String date=Controller.getToday();
         Model model=new Model();
 
-        Map<String,String> map=new HashMap<>();
+        LinkedHashMap<String,String> map=new LinkedHashMap<>();
         String doctorID=clinicRegister.getDoctorID();
         String patientID=clinicRegister.getPatientID();
         map.put("doctorID",doctorID);

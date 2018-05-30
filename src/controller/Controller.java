@@ -18,10 +18,7 @@ import javax.swing.*;
 import java.io.*;
 import java.lang.reflect.Type;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 
 /**
@@ -42,6 +39,8 @@ public class Controller<T> {
     public static HashMap<String, DoctorBean> doctorListMap;
     public static List<PatientInfoBean> patientInfoBeanList;
     public static HashMap<String, PatientInfoBean> patientListMap;
+    private static List<DrugBean> drugBeanList;
+    public static HashMap<String, DrugBean> drugBeanListMap;
 
     public Controller(IControllerListener<T> iControllerListener, Type type) {
         this.iControllerListener = iControllerListener;
@@ -79,6 +78,23 @@ public class Controller<T> {
                 patientListMap = new HashMap<>();
             for (int i = 0; i < patientInfoBeanList.size(); i++) {
                 patientListMap.put(patientInfoBeanList.get(i).getObjectId(), patientInfoBeanList.get(i));
+            }
+        }
+    }
+
+    public static List<DrugBean> getDrugBeanList() {
+        return drugBeanList;
+    }
+
+    public static void setDrugBeanList(List<DrugBean> drugBeanList) {
+        Controller.drugBeanList = drugBeanList;
+        if (drugBeanList != null) {
+            if (drugBeanListMap != null) {
+                drugBeanListMap.clear();
+            } else
+                drugBeanListMap = new HashMap<>();
+            for (int i = 0; i < drugBeanList.size(); i++) {
+                drugBeanListMap.put(drugBeanList.get(i).getObjectId(), drugBeanList.get(i));
             }
         }
     }
@@ -208,10 +224,12 @@ public class Controller<T> {
     };
 
 
-    public void findPatient(Map<String, String> data) {
+    public void findPatient(LinkedHashMap<String, String> data) {
         Model model = new Model();
-        if (StringUtil.isEmpty(data.get("name"))) {
-            data = null;
+        if (data!=null) {
+            if (StringUtil.isEmpty(data.get("name"))) {
+                data = null;
+            }
         }
         model.getData(ApiUrl.Post.PatientInfo_URL, data, new OnStringResponseListener() {
             @Override
@@ -294,7 +312,7 @@ public class Controller<T> {
         System.out.println(o);
     }
 
-    public void findDoctor(Map<String, String> data) {
+    public void findDoctor(LinkedHashMap<String, String> data) {
 
         Model model = new Model();
         model.getData(ApiUrl.Get.DOCTOR_URL, data, new OnStringResponseListener() {
@@ -311,6 +329,42 @@ public class Controller<T> {
                 }
             }
         });
+    }
+
+    public void findDrug(LinkedHashMap<String, String> data) {
+        Model model = new Model();
+        if (data!=null) {
+            if (StringUtil.isEmpty(data.get("name"))) {
+                data = null;
+            }
+        }
+        model.getData(ApiUrl.Get.Drug_URL, data, new OnStringResponseListener() {
+            @Override
+            public void onFinish(String responseBean, Exception e) {
+                if (responseBean.contains("error") || e != null) {
+                    iControllerListener.showMessage(responseBean + "");
+                } else {
+                    try {
+                        type=new TypeToken<ResultBean<DrugBean>>(){}.getType();
+                        ResultBean<DrugBean> resultBean=gson.fromJson(responseBean, type);
+                        setDrugBeanList(resultBean.getResults());
+                        iControllerListener.done((T)resultBean);
+                    } catch (Exception e1) {
+                        e1.printStackTrace();
+                    }
+                }
+            }
+        });
+    }
+
+    public DrugBean findLocalDrug(String objectId){
+        if (drugBeanListMap != null && !StringUtil.isEmpty(objectId)) {
+//            print("do find " + objectId);
+            return drugBeanListMap.get(objectId);
+        } else {
+//            print("do not find ");
+            return null;
+        }
     }
 
 
@@ -373,5 +427,6 @@ public class Controller<T> {
         }
         return strReturn;
     }
+
 
 }

@@ -15,6 +15,7 @@ import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -28,7 +29,7 @@ public class FindInfo {
     private int type;//0 patientInfo，1 RegisterBean
     private JPanel panel1;
     private JButton btnOK;
-    private Map<String, String> data = new HashMap<>();
+    private LinkedHashMap<String, String> data = new LinkedHashMap<>();
     private List<PatientInfoBean> dataInfo;
     private SimpleListener simpleListener;
     private Controller controller;
@@ -106,9 +107,9 @@ public class FindInfo {
     }
 
     public void initTableModelInfo() {
-
+        lbcount.setText(dataInfo.size()+"条数据");
         String[] columnNames = {"姓名", "性别", "身份证", "建卡时间"};
-        Object[][] obj = new Object[dataInfo.size()][4];
+        Object[][] obj = new Object[dataInfo.size()][columnNames.length];
         for (int i = 0; i < dataInfo.size(); i++) {
             PatientInfoBean patientInfo = dataInfo.get(i);
             for (int j = 0; j <= 3; j++) {
@@ -137,11 +138,11 @@ public class FindInfo {
         table.setModel(tableModel);
     }
 
-    public Map<String, String> renewNameData(String s) {
+    public LinkedHashMap<String, String> renewNameData(String s) {
         progressBar1.setVisible(true);
 
         if (data == null) {
-            data = new HashMap<>();
+            data = new LinkedHashMap<>();
         } else {
             data.clear();
         }
@@ -150,7 +151,7 @@ public class FindInfo {
         return data;
     }
 
-    public FindInfo(Map<String, String> data, int type) {
+    public FindInfo(LinkedHashMap<String, String> data, int type) {
         this.data = data;
         this.type = type;
         initContrller();
@@ -200,7 +201,7 @@ public class FindInfo {
 
     }
 
-    public static FindInfo main(Map<String, String> data, int type) {
+    public static FindInfo main(LinkedHashMap<String, String> data, int type) {
         title = type == 0 ? "查找病人信息" : "查找挂号信息";
         if (frame!=null){
             frame.dispose();
@@ -220,4 +221,5 @@ public class FindInfo {
     private JTextField tfName;
     private JProgressBar progressBar1;
     private JButton btnFind;
+    private JLabel lbcount;
 }

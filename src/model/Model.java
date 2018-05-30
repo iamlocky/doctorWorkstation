@@ -1,5 +1,6 @@
 package model;
 
+import Utils.LoggerUtil;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
@@ -24,7 +25,8 @@ public class Model<E> {
     public static final MediaType MEDIA_TYPE_FORM = MediaType.parse("multipart/form-data");
     public static final MediaType MEDIA_STREAM = MediaType.parse("application/octet-stream");
     private final String nullExceptionTag = "服务器返回为空";
-
+    private Integer limit = 200;
+    private Integer skip = 0;
     private int connectTimeout = 20;
     private int readOrWriteTimeout = 30;
 
@@ -57,6 +59,22 @@ public class Model<E> {
             String s = getGson().toJson(bean.getData());
             bean.setData(getGson().fromJson(s, type));
         }
+    }
+
+    public Integer getLimit() {
+        return limit;
+    }
+
+    public void setLimit(Integer limit) {
+        this.limit = limit;
+    }
+
+    public Integer getSkip() {
+        return skip;
+    }
+
+    public void setSkip(Integer skip) {
+        this.skip = skip;
     }
 
     /**
@@ -162,7 +180,7 @@ public class Model<E> {
      * @param responseListener 返回 List<T> 数据
      */
     public void getData(String apiUrl_Get, LinkedHashMap<String, String> params, final @NotNull OnResponseListener<E> responseListener) {
-        String finalUrl=apiUrl_Get;
+        String finalUrl = apiUrl_Get;
         if (params == null) {
             log("getdata params is null");
 
@@ -177,6 +195,8 @@ public class Model<E> {
 
         requestBuilder.addHeader("X-Bmob-Application-Id", Akey.appId);
         requestBuilder.addHeader("X-Bmob-REST-API-Key", Akey.restId);
+//        requestBuilder.addHeader("limit", limit.toString());
+//        requestBuilder.addHeader("skip", skip.toString());
         requestBuilder.get();
 
         request = requestBuilder.build();
@@ -222,91 +242,41 @@ public class Model<E> {
 
     /**
      * @param apiUrl_Get       get的url
-     * @param params           要传的值
-     * @param responseListener 返回 List<T> 数据
-     */
-    public void getData(String apiUrl_Get, LinkedHashMap<String, String> params, final @NotNull OnStringResponseListener responseListener) {
-        String finalUrl=apiUrl_Get;
-        if (params == null) {
-            log("getdata params is null");
-        } else {
-            finalUrl = attachHttpGetParams(apiUrl_Get, params);
-        }
-        client = new OkHttpClient.Builder().connectTimeout(connectTimeout, TimeUnit.SECONDS)
-                .readTimeout(readOrWriteTimeout, TimeUnit.SECONDS)
-                .writeTimeout(readOrWriteTimeout, TimeUnit.SECONDS).build();
-
-        requestBuilder = new Request.Builder().url(finalUrl);
-
-        requestBuilder.addHeader("X-Bmob-Application-Id", Akey.appId);
-        requestBuilder.addHeader("X-Bmob-REST-API-Key", Akey.restId);
-        requestBuilder.get();
-
-        request = requestBuilder.build();
-        if (call != null) {
-            call.cancel();
-        }
-        call = client.newCall(request);
-        call.enqueue(new Callback() {
-            @Override
-            public void onFailure(Call call, IOException e) {
-                finishOnMainThread(responseListener, null, e);
-                e.printStackTrace();
-            }
-
-            @Override
-            public void onResponse(Call call, Response response) throws IOException {
-                try {
-                    responseString = response.body().string();
-                    log(responseString);
-                    if (checkResponseIsNull(responseString)) {
-                        finishOnMainThread(responseListener, null, new Exception(nullExceptionTag));
-                        return;
-                    }
-
-                    Type type = new TypeToken<UniversalResponseBean<E>>() {
-                    }.getType();
-//                    universalResponseBean = gson.fromJson(responseString, type);
-                    if (Model.this.type != null) {
-                        convert(universalResponseBean);
-                    }
-                    finishOnMainThread(responseListener, responseString, null);
-
-                    return;
-                } catch (Exception e) {
-                    finishOnMainThread(responseListener, null, e);
-
-                    e.printStackTrace();
-                }
-
-            }
-        });
-    }
-
-    /**
-     * @param apiUrl_Get       get的url
      * @param data           要传的值
      * @param responseListener 返回 List<T> 数据
      */
-    public void getData(String apiUrl_Get, Map<String,String> data, final @NotNull OnStringResponseListener responseListener) {
-        String finalUrl=apiUrl_Get;
-        if (data == null) {
-            log("getdata params is null");
-        } else {
-            try {
-                finalUrl = apiUrl_Get+"?where="+URLEncoder.encode(gson.toJson(data),"UTF-8").replace("%3A",":");
-            } catch (UnsupportedEncodingException e) {
-                e.printStackTrace();
+    public void getData(String apiUrl_Get, LinkedHashMap<String, String> data, final @NotNull OnStringResponseListener responseListener) {
+        String finalUrl = apiUrl_Get;
+        LinkedHashMap<String, String> params = new LinkedHashMap<>();
+        if (!apiUrl_Get.equals(ApiUrl.Get.LOGIN_USER_URL)) {
+            if (data == null) {//查询全部
+                params.put("limit",limit.toString());
+                params.put("skip",skip.toString());
+                finalUrl = attachHttpGetParams(apiUrl_Get, params);
+            }else {//条件查询
+                try {
+                    finalUrl = apiUrl_Get+"?where="+URLEncoder.encode(gson.toJson(data),"UTF-8").replace("%3A",":");
+                } catch (UnsupportedEncodingException e) {
+                    e.printStackTrace();
+                }
             }
+
+        } else {//登录
+            params=data;
+            finalUrl = attachHttpGetParams(apiUrl_Get, params);
         }
+
+
         client = new OkHttpClient.Builder().connectTimeout(connectTimeout, TimeUnit.SECONDS)
                 .readTimeout(readOrWriteTimeout, TimeUnit.SECONDS)
                 .writeTimeout(readOrWriteTimeout, TimeUnit.SECONDS).build();
-
+        log(finalUrl);
         requestBuilder = new Request.Builder().url(finalUrl);
 
         requestBuilder.addHeader("X-Bmob-Application-Id", Akey.appId);
         requestBuilder.addHeader("X-Bmob-REST-API-Key", Akey.restId);
+//        requestBuilder.addHeader("limit", limit.toString());
+//        requestBuilder.addHeader("skip", skip.toString());
         requestBuilder.get();
 
         request = requestBuilder.build();
@@ -314,7 +284,6 @@ public class Model<E> {
             call.cancel();
         }
         call = client.newCall(request);
-        log(finalUrl);
         call.enqueue(new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
@@ -350,6 +319,7 @@ public class Model<E> {
             }
         });
     }
+
 
 
     /**
@@ -461,11 +431,11 @@ public class Model<E> {
      * @param id               要删除的id
      * @param responseListener
      */
-    public void delData(String apiUrl_Del, String id,OnStringResponseListener responseListener) {
+    public void delData(String apiUrl_Del, String id, OnStringResponseListener responseListener) {
         client = new OkHttpClient.Builder().connectTimeout(connectTimeout, TimeUnit.SECONDS)
                 .readTimeout(readOrWriteTimeout, TimeUnit.SECONDS)
                 .writeTimeout(readOrWriteTimeout, TimeUnit.SECONDS).build();
-        requestBuilder = new Request.Builder().url(apiUrl_Del + "/"+id);
+        requestBuilder = new Request.Builder().url(apiUrl_Del + "/" + id);
 
         requestBuilder.addHeader("X-Bmob-Application-Id", Akey.appId);
         requestBuilder.addHeader("X-Bmob-REST-API-Key", Akey.restId);
@@ -531,7 +501,7 @@ public class Model<E> {
 
 
     public Boolean checkResponseIsNull(String responseString) {
-        if (responseString!=null) {
+        if (responseString != null) {
             if (responseString.length() > 2) {
                 return false;
             }
@@ -540,25 +510,19 @@ public class Model<E> {
     }
 
 
-
     public void finishOnMainThread(OnResponseListener<E> onResponseListener, UniversalResponseBean<E> bean, Exception e) {
-        SwingUtilities.invokeLater(()->{
+        SwingUtilities.invokeLater(() -> {
             onResponseListener.onFinish(bean.getData(), e);
         });
     }
 
     public void finishOnMainThread(OnStringResponseListener onResponseListener, String bean, Exception e) {
-        SwingUtilities.invokeLater(()->{
+        SwingUtilities.invokeLater(() -> {
             onResponseListener.onFinish(bean, e);
         });
     }
 
-    public static void log(Object msg){
-        System.out.println("\n------------------------------------");
-        StackTraceElement[] trace = new Throwable().getStackTrace();
-        for (StackTraceElement traceElement : trace)
-            System.out.println("\t---at " + traceElement);
-        System.out.println(msg.toString());
-        System.out.println("------------------------------------\n");
+    public static void log(Object msg) {
+        LoggerUtil.log(msg);
     }
 }

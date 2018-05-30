@@ -12,6 +12,7 @@ import view.ItemView;
 import Utils.ViewUtils;
 
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -33,6 +34,7 @@ public class DoctorStationView {
     private JButton btnAddClinicRegister;
     private JLabel lbtime;
     private JLabel lbqueue;
+    private JLabel lbtitle;
     JPanel panelContent1;
     private Controller controller;
     private DoctorController doctorController;
@@ -56,6 +58,7 @@ public class DoctorStationView {
 
 
     public void initView() {
+        lbtitle.setBorder(new EmptyBorder(0,10,0,0));
         timer = new Timer(1000, new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {

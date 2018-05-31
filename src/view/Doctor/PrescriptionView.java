@@ -26,9 +26,11 @@ public class PrescriptionView {
     private JButton 清空Button;
     private JPanel panel2;
     private JPanel panel3;
+    private JTextField lbSum;
     public CustomJPanel panelDrugs;
     private FindDrug findDrug;
     private Set<DrugBean> drugBeans=new HashSet<>();
+    private Double totalCount=0.0;
 
     public PrescriptionView() {
         panelPrescription.addFocusListener(new FocusAdapter() {
@@ -69,9 +71,26 @@ public class PrescriptionView {
 //        }
     }
 
+    SimpleListener<String> renewPriceListener=new SimpleListener<String>() {
+        @Override
+        public void done(String data) {
+            renewTotalPrice();
+        }
+
+        @Override
+        public void fail(ErrInfo errInfo) {
+
+        }
+
+        @Override
+        public void fail(String s) {
+
+        }
+    };
+
     public void addDrug2Panel(DrugBean drugBean){
         if (drugBeans.add(drugBean)) {
-            panelDrugs.add(new DrugItem(drugBean, panelDrugs).panel1);
+            panelDrugs.add(new DrugItem(drugBean, panelDrugs,renewPriceListener).panel1);
         }else {
             SwingUtilities.invokeLater(()->{
                 if (ViewUtils.currentFrame!=null) {
@@ -79,6 +98,16 @@ public class PrescriptionView {
                 }
             });
         }
+    }
+
+    void renewTotalPrice(){
+        DrugBean[] drugBeans1=new DrugBean[drugBeans.size()];
+        drugBeans.toArray(drugBeans1);
+        totalCount=0.0;
+        for (int i = 0; i < drugBeans1.length; i++) {
+            totalCount+=drugBeans1[i].getTotalPrice();
+        }
+        lbSum.setText(String.format("%.2f",totalCount)+"元");
     }
 
     public JTextArea addTextAera(JPanel panel) {
@@ -110,7 +139,7 @@ public class PrescriptionView {
                 setPreferredSize(new Dimension(400, (80 + 11) * getComponentCount() + 5));
                 validate();
                 SwingUtilities.invokeLater(()->{
-                    scrollPane.validate();
+                    scrollPane.repaint();
                 });
             }
         };

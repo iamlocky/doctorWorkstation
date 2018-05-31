@@ -2,6 +2,7 @@ package view.Doctor;
 
 import Utils.Toast;
 import Utils.ViewUtils;
+import controller.SimpleListener;
 import model.bean.DrugBean;
 
 import javax.swing.*;
@@ -9,6 +10,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class DrugItem extends JComponent{
+    private SimpleListener simpleListener;
     public JPanel panel1;
     public JButton btnSub;
     public JButton btnAdd;
@@ -47,10 +49,19 @@ public class DrugItem extends JComponent{
         this.index = index;
     }
 
-    public DrugItem(DrugBean drugBean,PrescriptionView.CustomJPanel parent) {
+    public DrugBean getDrugBean() {
+        return drugBean;
+    }
+
+    public void setDrugBean(DrugBean drugBean) {
+        this.drugBean = drugBean;
+    }
+
+    public DrugItem(DrugBean drugBean, PrescriptionView.CustomJPanel parent, SimpleListener simpleListener) {
+        this.simpleListener=simpleListener;
         this.drugBean=drugBean;
         count=drugBean.getCount();
-
+        simpleListener.done("done");
         try {
             lbcount.setText(count.toString());
             lbname.setText(drugBean.getName());
@@ -66,7 +77,7 @@ public class DrugItem extends JComponent{
             @Override
             public void actionPerformed(ActionEvent e) {
                 parent.remove(panel1,drugBean);
-
+                simpleListener.done("done");
             }
         });
         btnSub.addActionListener(new ActionListener() {
@@ -77,6 +88,7 @@ public class DrugItem extends JComponent{
                     drugBean.setCount(--count);
                     lbcount.setText(count.toString());
                     lbprice.setText(String.format("%.2f",drugBean.getTotalPrice())+"元");
+                    simpleListener.done("done");
                 }else {
                     if (ViewUtils.currentFrame!=null) {
                         new Toast(ViewUtils.currentFrame,"数量最小为1",1500,Toast.error).start();
@@ -90,6 +102,7 @@ public class DrugItem extends JComponent{
                 drugBean.setCount(++count);
                 lbcount.setText(count.toString());
                 lbprice.setText(String.format("%.2f",drugBean.getTotalPrice())+"元");
+                simpleListener.done("done");
             }
         });
     }

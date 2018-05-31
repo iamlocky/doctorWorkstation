@@ -20,10 +20,8 @@ import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
 import java.awt.*;
 import java.awt.event.*;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * 查找界面
@@ -43,6 +41,7 @@ public class FindDrug {
     private JTable table;
     private int index;
     private String currentObjectID;
+    private Thread thread;
 
 
     public void initView() {
@@ -54,7 +53,7 @@ public class FindDrug {
         table = new JTable();
         panelmain.add(new JScrollPane(table), BorderLayout.CENTER);
         initContrller();
-        initTableModelInfo();
+        dorenewDrugData();
     }
 
     public void setSimpleListener(SimpleListener simpleListener) {
@@ -86,8 +85,26 @@ public class FindDrug {
         }.getType());
     }
 
+    public Runnable findDrugData = new Runnable() {
+        @Override
+        public void run() {
+            dataInfo = DoctorController.getDrugDatabase();
+            SwingUtilities.invokeLater(()->{
+                initTableModelInfo();
+            });
+        }
+    };
+
+    public void dorenewDrugData() {
+        if (thread != null && thread.isAlive()) {
+            return;
+        }
+        progressBar1.setVisible(true);
+        thread = new Thread(findDrugData);
+        thread.start();
+    }
+
     public void initTableModelInfo() {
-        dataInfo = DoctorController.getDrugDatabase();
         lbcount.setText(dataInfo.size() + "条数据");
         String[] columnNames = {"药品名", "剂量", "规格", "批准文号", "生产企业", "仓库编号", "价格"};
         Object[][] obj = new Object[dataInfo.size()][columnNames.length];
@@ -128,6 +145,8 @@ public class FindDrug {
         table.setModel(tableModel);
         sorter = new TableRowSorter<TableModel>(tableModel);
         table.setRowSorter(sorter);
+
+        progressBar1.setVisible(false);
     }
 
     public void renewFindFilter() {

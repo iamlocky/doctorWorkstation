@@ -1,9 +1,9 @@
 package view.Doctor;
 
-import controller.Controller;
-import controller.DoctorController;
-import controller.IControllerListener;
+import Utils.Toast;
+import controller.*;
 import model.bean.ClinicRegisterBean;
+import model.bean.ErrInfo;
 import model.bean.PatientInfoBean;
 import view.ItemView;
 import Utils.ViewUtils;
@@ -33,6 +33,7 @@ public class AddMedicalCase {
     private CaseView caseView;
     private PrescriptionView prescriptionView;
     private AdviceView adviceView;
+    private ItemController itemController;
 
     public static void main(ClinicRegisterBean clinicRegisterBean, PatientInfoBean patientInfoBean) {
         frame = new JFrame("医生工作站---当前工作人员: " + Controller.getUser().getName() + " " + Controller.getUser().getUsername());
@@ -99,5 +100,48 @@ public class AddMedicalCase {
 
             }
         }, null);
+
+        btn1.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                new Toast(ViewUtils.currentFrame, "操作成功", 1500, Toast.success).start();
+            }
+        });
+
+        btn2.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (itemController==null) {
+                    itemController=new ItemController();
+                }
+                progressBar1.setVisible(true);
+                clinicRegisterBean.setHasVisited(1);
+                itemController.putRegister(clinicRegisterBean, new SimpleListener() {
+                    @Override
+                    public void done(Object data) {
+                        progressBar1.setVisible(false);
+                        if (ViewUtils.currentFrame != null) {
+                            new Toast(ViewUtils.currentFrame, "操作成功", 1500, Toast.success).start();
+                        }
+                    }
+
+                    @Override
+                    public void fail(ErrInfo errInfo) {
+                        progressBar1.setVisible(false);
+                        if (ViewUtils.currentFrame != null) {
+                            new Toast(ViewUtils.currentFrame, "操作失败", 1500, Toast.error).start();
+                        }
+                    }
+
+                    @Override
+                    public void fail(String s) {
+                        progressBar1.setVisible(false);
+                        if (ViewUtils.currentFrame != null) {
+                            new Toast(ViewUtils.currentFrame, "操作失败", 1500, Toast.error).start();
+                        }
+                    }
+                });
+            }
+        });
     }
 }

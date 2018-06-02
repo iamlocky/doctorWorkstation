@@ -137,11 +137,11 @@
                 <properties/>
                 <border type="none"/>
                 <children>
-                  <component id="d7507" class="javax.swing.JButton" binding="清空Button" default-binding="true">
+                  <component id="d7507" class="javax.swing.JButton" binding="btnClear" default-binding="true">
                     <constraints/>
                     <properties>
-                      <preferredSize width="72" height="40"/>
-                      <text value="清空"/>
+                      <preferredSize width="82" height="40"/>
+                      <text value="清空药品"/>
                     </properties>
                   </component>
                 </children>

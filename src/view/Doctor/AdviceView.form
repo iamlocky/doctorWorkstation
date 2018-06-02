@@ -21,7 +21,7 @@
             <constraints border-constraint="North"/>
             <properties>
               <font style="1"/>
-              <text value="诊断"/>
+              <text value="医嘱"/>
             </properties>
           </component>
           <grid id="12b7c" binding="panel1" layout-manager="BorderLayout" hgap="0" vgap="0">

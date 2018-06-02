@@ -10,7 +10,7 @@
     </properties>
     <border type="none"/>
     <children>
-      <grid id="e6b99" layout-manager="FlowLayout" hgap="5" vgap="5" flow-align="3">
+      <grid id="e6b99" binding="panelmain" layout-manager="FlowLayout" hgap="5" vgap="5" flow-align="3">
         <constraints border-constraint="North"/>
         <properties>
           <background color="-16223786"/>
@@ -53,9 +53,11 @@
                   <text value="-"/>
                 </properties>
               </component>
-              <component id="7caf0" class="javax.swing.JLabel" binding="lbcount">
+              <component id="4cc2b" class="javax.swing.JTextField" binding="tfcount">
                 <constraints/>
                 <properties>
+                  <horizontalAlignment value="0"/>
+                  <preferredSize width="40" height="26"/>
                   <text value="1"/>
                 </properties>
               </component>

@@ -1,5 +1,7 @@
 package view.Doctor;
 
+import Utils.ViewUtils;
+
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
@@ -18,17 +20,10 @@ public class CaseView {
     private JTextArea textArea3;
     private JTextArea textArea4;
     public CaseView() {
-        textArea1=addTextAera(panel1);
-        textArea2=addTextAera(panel2);
-        textArea3=addTextAera(panel3);
-        textArea4=addTextAera(panel4);
+        textArea1= ViewUtils.addTextAera(panel1,400,120);
+        textArea2=ViewUtils.addTextAera(panel2,400,120);
+        textArea3=ViewUtils.addTextAera(panel3,400,120);
+        textArea4=ViewUtils.addTextAera(panel4,400,120);
 }
 
-    public JTextArea addTextAera(JPanel panel){
-        JTextArea textArea=new JTextArea(5,25);
-        textArea.setPreferredSize(new Dimension(400,120));
-        panel.add(new JScrollPane(textArea),BorderLayout.CENTER);
-        panel.setBorder(new EmptyBorder(5,0,5,0));
-        return textArea;
-    }
 }

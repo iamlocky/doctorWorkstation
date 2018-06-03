@@ -14,6 +14,9 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Type;
 import java.net.URLEncoder;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -524,5 +527,14 @@ public class Model<E> {
 
     public static void log(Object msg) {
         LoggerUtil.log(msg);
+    }
+
+    public static Connection getDrugDatabase() {
+        try {
+            return DriverManager.getConnection("jdbc:sqlite:database\\drugDatabase.db");
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }

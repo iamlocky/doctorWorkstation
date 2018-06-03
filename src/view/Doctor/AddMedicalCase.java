@@ -39,7 +39,6 @@ public class AddMedicalCase {
     private CaseView caseView;
     private PrescriptionView prescriptionView;
     private AdviceView adviceView;
-    private ItemController itemController;
 
     public static void main(ClinicRegisterBean clinicRegisterBean, PatientInfoBean patientInfoBean) {
         frame = new JFrame("医生工作站---当前工作人员: " + Controller.getUser().getName() + " " + Controller.getUser().getUsername());
@@ -138,12 +137,10 @@ public class AddMedicalCase {
     }
 
     public void renewClinicRegister(){
-        if (itemController==null) {
-            itemController=new ItemController();
-        }
+
         progressBar1.setVisible(true);
         clinicRegisterBean.setHasVisited(1);
-        itemController.putRegister(clinicRegisterBean, new SimpleListener() {
+        doctorController.putRegister(clinicRegisterBean, new SimpleListener() {
             @Override
             public void done(Object data) {
                 progressBar1.setVisible(false);

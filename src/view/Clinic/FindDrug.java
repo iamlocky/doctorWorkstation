@@ -57,9 +57,6 @@ public class FindDrug {
         dorenewDrugData();
     }
 
-    public void setSimpleListener(SimpleListener simpleListener) {
-        this.simpleListener = simpleListener;
-    }
 
     public void initContrller() {
         controller = new Controller(new IControllerListener<ResultBean<DrugBean>>() {
@@ -197,11 +194,8 @@ public class FindDrug {
     public FindDrug(LinkedHashMap<String, String> data, SimpleListener simpleListener) {
         this.simpleListener = simpleListener;
         this.data = data;
-//        initContrller();
         initView();
-//        if (data != null) {
-//        }
-//        controller.findDrug(null);
+
         tfName.getDocument().addDocumentListener(new DocumentListener() {
             @Override
             public void insertUpdate(DocumentEvent e) {
@@ -230,13 +224,7 @@ public class FindDrug {
                 }
             }
         });
-//        btnFind.addActionListener(new ActionListener() {
-//            @Override
-//            public void actionPerformed(ActionEvent e) {
-////                controller.findDrug(renewNameData(tfName.getText().trim()));
-//
-//            }
-//        });
+
 
         table.addMouseListener(new MouseAdapter() {
             @Override
@@ -286,6 +274,5 @@ public class FindDrug {
     private JLabel lb;
     private JTextField tfName;
     private JProgressBar progressBar1;
-    //    private JButton btnFind;
     private JLabel lbcount;
 }

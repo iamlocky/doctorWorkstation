@@ -108,7 +108,7 @@ public class DoctorController extends Controller {
         ResultSet resultSet;
         ResultSetMetaData resultSetMetaData;
         try {
-            connection = DriverManager.getConnection("jdbc:sqlite:database\\drugDatabase.db");
+            connection = Model.getDrugDatabase();
             statement = connection.createStatement();
             statement.setQueryTimeout(30);  // set timeout to 30 sec.
             resultSet = statement.executeQuery("SELECT * FROM drugInfo limit 1;");
@@ -132,7 +132,6 @@ public class DoctorController extends Controller {
                 drugBean.setForm(resultSet.getString(6));
                 drugBean.setPrice(resultSet.getDouble(7));
                 drugBean.setObjectId("st"+i);
-//                print(drugBean.toString());
                 drugBeans.add(drugBean);
             }
             resultSet.close();
@@ -146,6 +145,27 @@ public class DoctorController extends Controller {
         return drugBeans;
     }
 
-
+    public void putRegister(ClinicRegisterBean clinicRegisterBean, SimpleListener simpleListener){
+        HashMap<String,Object> map=new HashMap<>();
+        map.put("hasVisited",clinicRegisterBean.getHasVisited());
+        if (!StringUtil.isEmpty(clinicRegisterBean.getCaseDetail())) {
+            map.put("caseDetail",clinicRegisterBean.getCaseDetail());
+        }
+        Model model = new Model();
+        model.putData(ApiUrl.Post.REGISTER_Info + Controller.getToday()+"/" + clinicRegisterBean.getObjectId(), map, new OnStringResponseListener() {
+            @Override
+            public void onFinish(String responseBean, Exception e) {
+                if (e==null) {
+                    if (responseBean.contains("updatedAt")) {
+                        simpleListener.done(responseBean);
+                    }else {
+                        simpleListener.fail(responseBean);
+                    }
+                }else {
+                    simpleListener.fail(e.getMessage());
+                }
+            }
+        });
+    }
 
 }

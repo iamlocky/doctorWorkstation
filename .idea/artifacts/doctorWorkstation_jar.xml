@@ -14,6 +14,8 @@
       <element id="extracted-dir" path="$PROJECT_DIR$/jgoodies-forms-1.8.0.jar" path-in-jar="/" />
       <element id="extracted-dir" path="$PROJECT_DIR$/jar/substance-8.0.02.jar" path-in-jar="/" />
       <element id="extracted-dir" path="$PROJECT_DIR$/jar/sqlite-jdbc-3.23.1.jar" path-in-jar="/" />
+      <element id="file-copy" path="$PROJECT_DIR$/database/drugDatabase.db" />
+      <element id="dir-copy" path="$PROJECT_DIR$/database" />
     </root>
   </artifact>
 </component>

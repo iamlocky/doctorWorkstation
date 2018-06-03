@@ -4,8 +4,10 @@ import Utils.LoggerUtil;
 import Utils.Toast;
 import Utils.ViewUtils;
 import controller.SimpleListener;
+import model.bean.CaseDetail;
 import model.bean.DrugBean;
 import model.bean.ErrInfo;
+import sun.util.calendar.JulianCalendar;
 import view.Clinic.FindDrug;
 
 import javax.swing.*;
@@ -15,7 +17,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 public class PrescriptionView {
@@ -31,8 +35,11 @@ public class PrescriptionView {
     private FindDrug findDrug;
     private Set<DrugBean> drugBeans = new HashSet<>();
     private Double totalCount = 0.0;
+    private CaseDetail caseDetail;
 
-    public PrescriptionView() {
+    public PrescriptionView(CaseDetail caseDetail) {
+        this.caseDetail = caseDetail;
+
         panelPrescription.addFocusListener(new FocusAdapter() {
             @Override
             public void focusGained(FocusEvent e) {
@@ -64,11 +71,7 @@ public class PrescriptionView {
         });
 
         panelDrugs = addScrollPane(panel2);
-//        for (int i = 0; i < 5; i++) {
-//            DrugBean drugBean=new DrugBean();
-//            drugBean.setCount(i);
-//            addDrug2Panel(drugBean);
-//        }
+
         btnClear.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -76,12 +79,21 @@ public class PrescriptionView {
                 drugBeans.clear();
                 renewTotalPrice();
                 try {
-                    new Toast(ViewUtils.currentFrame,"已清空药品",1800,Toast.success).start();
+                    new Toast(ViewUtils.currentFrame, "已清空药品", 1800, Toast.success).start();
                 } catch (Exception e1) {
                     e1.printStackTrace();
                 }
             }
         });
+
+        if (caseDetail.getDrugBeans() != null) {
+            if (caseDetail.getDrugBeans().size()>0) {
+                for (DrugBean bean : caseDetail.getDrugBeans()
+                        ) {
+                    addDrug2Panel(bean);
+                }
+            }
+        }
     }
 
     SimpleListener<String> renewPriceListener = new SimpleListener<String>() {
@@ -111,6 +123,15 @@ public class PrescriptionView {
                 }
             });
         }
+    }
+
+    public void renewCaseDetail() {
+        if (caseDetail == null) {
+            caseDetail = new CaseDetail();
+        }
+        List<DrugBean> drugBeanList = new ArrayList<>();
+        drugBeanList.addAll(drugBeans);
+        caseDetail.setDrugBeans(drugBeanList);
     }
 
     void renewTotalPrice() {
@@ -183,7 +204,7 @@ public class PrescriptionView {
             }
         }
 
-        public void removeAll(){
+        public void removeAll() {
             super.removeAll();
             repaint();
         }

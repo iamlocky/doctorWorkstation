@@ -1,7 +1,11 @@
 package view.Doctor;
 
+import Utils.StringUtil;
 import Utils.Toast;
+import com.google.gson.JsonSyntaxException;
 import controller.*;
+import model.Model;
+import model.bean.CaseDetail;
 import model.bean.ClinicRegisterBean;
 import model.bean.ErrInfo;
 import model.bean.PatientInfoBean;
@@ -21,6 +25,8 @@ public class AddMedicalCase {
     private JPanel panelContent3;
     private ClinicRegisterBean clinicRegisterBean;
     private PatientInfoBean patientInfoBean;
+    private CaseDetail caseDetail=new CaseDetail();
+
     private JPanel panel1;
     private JPanel panelLeft;
     private JPanel panelmain;
@@ -60,9 +66,10 @@ public class AddMedicalCase {
         ItemView itemView = new ItemView(clinicRegisterBean, "detail");
         panelLeft.add(itemView.panel1);
 
-        caseView = new CaseView();
-        prescriptionView = new PrescriptionView();
-        adviceView = new AdviceView();
+        caseView = new CaseView(caseDetail);
+        prescriptionView = new PrescriptionView(caseDetail);
+        adviceView = new AdviceView(caseDetail);
+
         panelContent1.add(caseView.panelCase);
         panelContent2.add(prescriptionView.panelPrescription);
         panelContent3.add(adviceView.panelAdvice);
@@ -83,7 +90,21 @@ public class AddMedicalCase {
     public AddMedicalCase(ClinicRegisterBean clinicRegisterBean, PatientInfoBean patientInfoBean) {
         this.clinicRegisterBean = clinicRegisterBean;
         this.patientInfoBean = patientInfoBean;
+        if (clinicRegisterBean.getHasVisited()==1){
+            try {
+                String s=clinicRegisterBean.getCaseDetail();
+                if (!StringUtil.isEmpty(s)&&!s.equals("null")) {
+                    caseDetail= Model.getGson().fromJson(clinicRegisterBean.getCaseDetail(),CaseDetail.class);
+                }else {
+                    caseDetail=new CaseDetail();
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+                caseDetail=new CaseDetail();
+            }
+        }
         initView();
+
         doctorController = new DoctorController(new IControllerListener() {
             @Override
             public void done(Object data) {
@@ -104,44 +125,57 @@ public class AddMedicalCase {
         btn1.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                new Toast(ViewUtils.currentFrame, "操作成功", 1500, Toast.success).start();
+                save();
             }
         });
 
         btn2.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if (itemController==null) {
-                    itemController=new ItemController();
-                }
-                progressBar1.setVisible(true);
-                clinicRegisterBean.setHasVisited(1);
-                itemController.putRegister(clinicRegisterBean, new SimpleListener() {
-                    @Override
-                    public void done(Object data) {
-                        progressBar1.setVisible(false);
-                        if (ViewUtils.currentFrame != null) {
-                            new Toast(ViewUtils.currentFrame, "操作成功", 1500, Toast.success).start();
-                        }
-                    }
-
-                    @Override
-                    public void fail(ErrInfo errInfo) {
-                        progressBar1.setVisible(false);
-                        if (ViewUtils.currentFrame != null) {
-                            new Toast(ViewUtils.currentFrame, "操作失败", 1500, Toast.error).start();
-                        }
-                    }
-
-                    @Override
-                    public void fail(String s) {
-                        progressBar1.setVisible(false);
-                        if (ViewUtils.currentFrame != null) {
-                            new Toast(ViewUtils.currentFrame, "操作失败", 1500, Toast.error).start();
-                        }
-                    }
-                });
+                renewClinicRegister();
             }
         });
+    }
+
+    public void renewClinicRegister(){
+        if (itemController==null) {
+            itemController=new ItemController();
+        }
+        progressBar1.setVisible(true);
+        clinicRegisterBean.setHasVisited(1);
+        itemController.putRegister(clinicRegisterBean, new SimpleListener() {
+            @Override
+            public void done(Object data) {
+                progressBar1.setVisible(false);
+                new Toast(ViewUtils.currentFrame, "操作成功", 1500, Toast.success).start();
+
+            }
+
+            @Override
+            public void fail(ErrInfo errInfo) {
+                progressBar1.setVisible(false);
+                if (ViewUtils.currentFrame != null) {
+                    new Toast(ViewUtils.currentFrame, "操作失败", 1500, Toast.error).start();
+                }
+            }
+
+            @Override
+            public void fail(String s) {
+                progressBar1.setVisible(false);
+                if (ViewUtils.currentFrame != null) {
+                    new Toast(ViewUtils.currentFrame, "操作失败", 1500, Toast.error).start();
+                }
+            }
+        });
+    }
+
+    public void save(){
+        caseView.renewCaseDetail();
+        prescriptionView.renewCaseDetail();
+        adviceView.renewCaseDetail();
+        clinicRegisterBean.setCaseDetail(Model.getGson().toJson(caseDetail));
+        Controller.print(clinicRegisterBean.getCaseDetail());
+        renewClinicRegister();
+
     }
 }

@@ -20,6 +20,7 @@ import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
 import java.awt.*;
 import java.awt.event.*;
+import java.util.Comparator;
 import java.util.LinkedHashMap;
 import java.util.List;
 
@@ -144,6 +145,25 @@ public class FindDrug {
         };
         table.setModel(tableModel);
         sorter = new TableRowSorter<TableModel>(tableModel);
+        Comparator<Double> numberComparator = new Comparator<Double>() {
+            @Override
+            public int compare(Double o1, Double o2) {
+                if ( o1 == null ) {
+                    return -1;
+                }
+                if ( o2 == null ) {
+                    return 1;
+                }
+                if ( o1< o2) {
+                    return -1;
+                }
+                if ( o1 > o2 ) {
+                    return 1;
+                }
+                return 0;
+            }
+        };
+        sorter.setComparator(6,numberComparator);
         table.setRowSorter(sorter);
 
         progressBar1.setVisible(false);

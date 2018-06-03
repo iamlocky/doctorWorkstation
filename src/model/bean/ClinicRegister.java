@@ -8,7 +8,7 @@ public class ClinicRegister implements Serializable {
     private String doctorID;
     private Integer queueNumber;
     private Integer hasVisited=0;
-
+    private String caseDetail;
 
     public String getPatientID() {
         return PatientID;

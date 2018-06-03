@@ -12,7 +12,7 @@
     </constraints>
     <properties>
       <minimumSize width="500" height="500"/>
-      <preferredSize width="500" height="500"/>
+      <preferredSize width="500" height="520"/>
     </properties>
     <border type="none"/>
     <children>
@@ -25,7 +25,7 @@
           <forms defaultalign-vert="false"/>
         </constraints>
         <properties>
-          <minimumSize width="0" height="80"/>
+          <minimumSize width="0" height="70"/>
           <preferredSize width="0" height="80"/>
         </properties>
         <border type="none"/>
@@ -40,7 +40,7 @@
           <grid id="c51ec" binding="panel1" layout-manager="FlowLayout" hgap="5" vgap="5" flow-align="1">
             <constraints border-constraint="Center"/>
             <properties>
-              <minimumSize width="0" height="60"/>
+              <minimumSize width="0" height="50"/>
               <preferredSize width="0" height="0"/>
             </properties>
             <border type="none"/>
@@ -81,7 +81,7 @@
         </constraints>
         <properties>
           <minimumSize width="400" height="100"/>
-          <preferredSize width="0" height="200"/>
+          <preferredSize width="0" height="350"/>
         </properties>
         <border type="etched"/>
         <children>
@@ -113,7 +113,7 @@
         </constraints>
         <properties>
           <minimumSize width="0" height="100"/>
-          <preferredSize width="0" height="110"/>
+          <preferredSize width="0" height="120"/>
         </properties>
         <border type="none"/>
         <children>
@@ -151,7 +151,7 @@
                 <properties>
                   <editable value="false"/>
                   <enabled value="true"/>
-                  <preferredSize width="100" height="26"/>
+                  <preferredSize width="100" height="30"/>
                 </properties>
               </component>
             </children>

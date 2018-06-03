@@ -14,5 +14,6 @@
     <orderEntry type="library" name="substance-8.0.02" level="project" />
     <orderEntry type="library" name="trident-1.5.00" level="project" />
     <orderEntry type="library" name="sqlite-jdbc-3.23.1" level="project" />
+    <orderEntry type="library" name="calendar" level="project" />
   </component>
 </module>

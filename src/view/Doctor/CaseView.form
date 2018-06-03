@@ -31,13 +31,6 @@
         </properties>
         <border type="none"/>
         <children>
-          <component id="2428a" class="javax.swing.JLabel">
-            <constraints border-constraint="North"/>
-            <properties>
-              <font style="1"/>
-              <text value="发病时间"/>
-            </properties>
-          </component>
           <grid id="8a3aa" binding="panel1" layout-manager="BorderLayout" hgap="0" vgap="0">
             <constraints border-constraint="Center"/>
             <properties>
@@ -46,6 +39,26 @@
             </properties>
             <border type="line"/>
             <children/>
+          </grid>
+          <grid id="98b68" layout-manager="FlowLayout" hgap="5" vgap="5" flow-align="3">
+            <constraints border-constraint="North"/>
+            <properties/>
+            <border type="none"/>
+            <children>
+              <component id="2428a" class="javax.swing.JLabel">
+                <constraints/>
+                <properties>
+                  <font style="1"/>
+                  <text value="发病时间"/>
+                </properties>
+              </component>
+              <component id="933c0" class="javax.swing.JButton" binding="btnAddTime">
+                <constraints/>
+                <properties>
+                  <text value="添加时间"/>
+                </properties>
+              </component>
+            </children>
           </grid>
         </children>
       </grid>

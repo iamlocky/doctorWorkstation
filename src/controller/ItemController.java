@@ -1,5 +1,6 @@
 package controller;
 
+import Utils.StringUtil;
 import model.ApiUrl;
 import model.Model;
 import model.OnStringResponseListener;
@@ -9,8 +10,11 @@ import java.util.HashMap;
 
 public class ItemController {
     public void putRegister(ClinicRegisterBean clinicRegisterBean, SimpleListener simpleListener){
-        HashMap<String,Integer> map=new HashMap<>();
+        HashMap<String,Object> map=new HashMap<>();
         map.put("hasVisited",clinicRegisterBean.getHasVisited());
+        if (!StringUtil.isEmpty(clinicRegisterBean.getCaseDetail())) {
+            map.put("caseDetail",clinicRegisterBean.getCaseDetail());
+        }
         Model model = new Model();
         model.putData(ApiUrl.Post.REGISTER_Info + Controller.getToday()+"/" + clinicRegisterBean.getObjectId(), map, new OnStringResponseListener() {
             @Override

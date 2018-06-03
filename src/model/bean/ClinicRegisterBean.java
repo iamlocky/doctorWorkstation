@@ -11,7 +11,8 @@ public class ClinicRegisterBean implements Serializable {
     private String objectId;
     private String createdAt;
     private Integer queueNumber;
-    private Integer hasVisited=0;
+    private Integer hasVisited = 0;
+    private String caseDetail;
 
 
     public String getObjectId() {
@@ -86,6 +87,14 @@ public class ClinicRegisterBean implements Serializable {
         this.hasVisited = hasVisited;
     }
 
+    public String getCaseDetail() {
+        return caseDetail;
+    }
+
+    public void setCaseDetail(String caseDetail) {
+        this.caseDetail = caseDetail;
+    }
+
     @Override
     public String toString() {
         return "ClinicRegisterBean{" +
@@ -98,6 +107,7 @@ public class ClinicRegisterBean implements Serializable {
                 ", createdAt='" + createdAt + '\'' +
                 ", queueNumber=" + queueNumber +
                 ", hasVisited=" + hasVisited +
+                ", caseDetail='" + caseDetail + '\'' +
                 '}';
     }
 }

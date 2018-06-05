@@ -167,6 +167,7 @@ public class ItemView extends JComponent {
     }
 
     public void print(Object o) {
+        System.out.println(getClass().getName()+"------------------");
         System.out.println(o);
     }
 }

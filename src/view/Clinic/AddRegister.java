@@ -126,7 +126,7 @@ public class AddRegister {
                     public void done(Object data) {
                         progressBar1.setVisible(false);
                         JOptionPane.showMessageDialog(null,data," 挂号成功！", JOptionPane.INFORMATION_MESSAGE);
-
+                        frame.dispose();
                     }
 
                     @Override

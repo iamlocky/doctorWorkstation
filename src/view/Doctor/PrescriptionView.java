@@ -7,8 +7,6 @@ import controller.SimpleListener;
 import model.bean.CaseDetail;
 import model.bean.DrugBean;
 import model.bean.ErrInfo;
-import sun.util.calendar.JulianCalendar;
-import view.Clinic.FindDrug;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;

@@ -1,12 +1,15 @@
-package view.Clinic;
+package view.Doctor;
 
 import Utils.StringUtil;
+import Utils.Toast;
 import com.google.gson.reflect.TypeToken;
 import controller.Controller;
 import controller.DoctorController;
 import controller.IControllerListener;
 import controller.SimpleListener;
+import model.Model;
 import model.bean.DrugBean;
+import model.bean.ErrInfo;
 import model.bean.PatientInfoBean;
 import model.bean.ResultBean;
 import Utils.ViewUtils;
@@ -87,9 +90,44 @@ public class FindDrug {
         @Override
         public void run() {
             dataInfo = DoctorController.getDrugDatabase();
-            SwingUtilities.invokeLater(()->{
-                initTableModelInfo();
-            });
+            if (dataInfo == null || dataInfo.size() == 0) {
+                SwingUtilities.invokeLater(() -> {
+                    new Toast(ViewUtils.currentFrame, "未找到药品数据库，正在开始下载", 1500, Toast.error).start();
+                    progressBar1.setVisible(true);
+                });
+                controller.getDrugDatabase(new SimpleListener() {
+                    @Override
+                    public void done(Object data) {
+                        dataInfo = DoctorController.getDrugDatabase();
+
+                        SwingUtilities.invokeLater(() -> {
+                            initTableModelInfo();
+                        });
+                    }
+
+                    @Override
+                    public void fail(ErrInfo errInfo) {
+                        progressBar1.setVisible(false);
+                        SwingUtilities.invokeLater(() -> {
+                            new Toast(ViewUtils.currentFrame, errInfo.getError(), 1500, Toast.error).start();
+                        });
+
+                    }
+
+                    @Override
+                    public void fail(String s) {
+                        progressBar1.setVisible(false);
+                        Model.log(s);
+                        SwingUtilities.invokeLater(() -> {
+                            new Toast(ViewUtils.currentFrame, s + "", 1500, Toast.error).start();
+                        });
+
+                    }
+                });
+            } else
+                SwingUtilities.invokeLater(() -> {
+                    initTableModelInfo();
+                });
         }
     };
 
@@ -145,22 +183,22 @@ public class FindDrug {
         Comparator<Double> numberComparator = new Comparator<Double>() {
             @Override
             public int compare(Double o1, Double o2) {
-                if ( o1 == null ) {
+                if (o1 == null) {
                     return -1;
                 }
-                if ( o2 == null ) {
+                if (o2 == null) {
                     return 1;
                 }
-                if ( o1< o2) {
+                if (o1 < o2) {
                     return -1;
                 }
-                if ( o1 > o2 ) {
+                if (o1 > o2) {
                     return 1;
                 }
                 return 0;
             }
         };
-        sorter.setComparator(6,numberComparator);
+        sorter.setComparator(6, numberComparator);
         table.setRowSorter(sorter);
 
         progressBar1.setVisible(false);
@@ -195,6 +233,7 @@ public class FindDrug {
         this.simpleListener = simpleListener;
         this.data = data;
         initView();
+
 
         tfName.getDocument().addDocumentListener(new DocumentListener() {
             @Override

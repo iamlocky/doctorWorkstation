@@ -193,6 +193,7 @@ public class ClinicController {
     }
 
     public static void print(Object o){
+        System.out.println("--------clinicController----------");
         System.out.println(o);
     }
     public void getRegisterList(SimpleListener simpleListener) {

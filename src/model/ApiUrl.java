@@ -11,7 +11,7 @@ public class ApiUrl {
     }
     public static String BASE_URL ="https://api.bmob.cn/1/";
     public static String CLASS_URL = "https://api.bmob.cn/1/classes/";
-
+    public static String DrugDataBase_URL="http://bmob-cdn-19708.b0.upaiyun.com/2018/06/05/6725171f40562989804615781e094caf.db";
 
     public static class Get {
 
@@ -19,6 +19,7 @@ public class ApiUrl {
         public static String DOCTOR_RSA_URL = CLASS_URL + "DoctorRsa";
         public static String DOCTOR_URL = BASE_URL + "users";
         public static String Drug_URL = CLASS_URL + "drugDB";
+        public static String DrugDatabase_URL = CLASS_URL + "drugDatabase";
     }
 
     public static class Post{

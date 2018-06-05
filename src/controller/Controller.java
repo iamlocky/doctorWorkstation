@@ -1,9 +1,11 @@
 package controller;
 
+import Utils.Downloader;
 import Utils.StringUtil;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
+import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
 import model.ApiUrl;
 import model.Model;
@@ -309,6 +311,7 @@ public class Controller<T> {
     }
 
     public static void print(Object o) {
+        System.out.println("--------controller----------");
         System.out.println(o);
     }
 
@@ -365,6 +368,40 @@ public class Controller<T> {
         }
     }
 
+    public void getDrugDatabase(SimpleListener simpleListener){
+        Model model=new Model();
+        model.getData(ApiUrl.Get.DrugDatabase_URL, null, new OnStringResponseListener() {
+            @Override
+            public void onFinish(String responseBean, Exception e) {
+                if (e==null){
+                    if (responseBean.contains("results")){
+                        try {
+                            type=new TypeToken<ResultBean<DrugDatabaseBean>>(){}.getType();
+                            DrugDatabaseBean databaseBean=((ResultBean<DrugDatabaseBean>)gson.fromJson(responseBean,type)).getResults().get(0);
+                            Downloader downloader=new Downloader();
+                            String path=System.getProperty("user.dir").replace("\\","/");
+                            File file=new File(path+"/database");
+                            if (!file.exists()) {
+                                file.mkdirs();
+                            }
+                            print(file.getCanonicalPath());
+                            downloader.download(databaseBean.getData().getUrl(),
+                                    path+"/database/"+databaseBean.getData().getFilename(),
+                                    simpleListener);
+                        } catch (Exception e1) {
+                            e1.printStackTrace();
+                            simpleListener.fail(e1.getMessage());
+                        }
+
+                    }
+                    simpleListener.done(responseBean);
+
+                }else
+                    simpleListener.fail(e.getMessage());
+            }
+        });
+    }
+
 
     public void setData(T data) {
         this.data = data;
@@ -408,23 +445,7 @@ public class Controller<T> {
         System.out.println(msg);
     }
 
-    public static String leftPading(String strSrc, String flag, int strSrcLength) {
-        String strReturn = "";
-        String strtemp = "";
-        int curLength = strSrc.trim().length();
-        if (strSrc != null && curLength > strSrcLength) {
-            strReturn = strSrc.trim().substring(0, strSrcLength);
-        } else if (strSrc != null && curLength == strSrcLength) {
-            strReturn = strSrc.trim();
-        } else {
 
-            for (int i = 0; i < (strSrcLength - curLength); i++) {
-                strtemp = strtemp + flag;
-            }
-            strReturn = strtemp + strSrc.trim();
-        }
-        return strReturn;
-    }
 
 
 }

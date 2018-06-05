@@ -8,6 +8,7 @@ import model.Model;
 import model.OnStringResponseListener;
 import model.bean.*;
 
+import javax.swing.*;
 import java.lang.reflect.Type;
 import java.sql.*;
 import java.util.*;
@@ -103,9 +104,9 @@ public class DoctorController extends Controller {
 
     public static List<DrugBean> getDrugDatabase() {
         List<DrugBean> drugBeans=new ArrayList<>();
-        Connection connection;
-        Statement statement;
-        ResultSet resultSet;
+        Connection connection=null;
+        Statement statement=null;
+        ResultSet resultSet=null;
         ResultSetMetaData resultSetMetaData;
         try {
             connection = Model.getDrugDatabase();
@@ -138,9 +139,19 @@ public class DoctorController extends Controller {
             connection.close();
             setDrugBeanList(drugBeans);
             return drugBeans;
-        } catch (SQLException e) {
+        } catch (Exception e) {
             e.printStackTrace();
             drugBeans=new ArrayList<>();
+            try {
+                if (resultSet!=null){
+                    resultSet.close();
+                }
+                if (connection!=null){
+                    connection.close();
+                }
+            } catch (SQLException e1) {
+                e1.printStackTrace();
+            }
         }
         return drugBeans;
     }

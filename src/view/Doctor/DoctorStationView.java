@@ -182,6 +182,7 @@ public class DoctorStationView {
     }
 
     public void print(Object o) {
+        System.out.println(getClass().getName()+"------------------");
         System.out.println(o);
     }
 
